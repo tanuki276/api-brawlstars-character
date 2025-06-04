@@ -15,7 +15,7 @@ const app = express();
 const SECRET_KEY = process.env.SECRET_KEY || 'your-secret-key';
 const CHARACTER_PATH = path.join(__dirname, 'character.json');
 
-app.use('/icons', express.static(path.join(__dirname, 'icons')));
+app.use('/public', express.static(path.join(__dirname, 'icons')));
 
 app.use(express.json());
 
