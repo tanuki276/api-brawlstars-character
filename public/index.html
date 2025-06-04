@@ -5,12 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Brawlchara</title>
   <link rel="stylesheet" href="/style.css" />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     #tokenList code {
       display: inline-block;
@@ -20,7 +15,6 @@
       text-overflow: ellipsis;
       vertical-align: middle;
     }
-    /* css */
     #disclaimer {
       color: #6b0000;
       font-weight: 600;
@@ -42,8 +36,7 @@
 </head>
 <body>
   <p id="disclaimer">
-    ※このアプリは公式ではありません。非公式のファンメイドツールです。  
-    ご利用は自己責任でお願いします。
+    ※このアプリは公式ではありません。非公式のファンメイドツールです。ご利用は自己責任でお願いします。
   </p>
 
   <h1><i class="fa-solid fa-user-ghost"></i> Brawlchara</h1>
@@ -86,7 +79,7 @@
         button.disabled = true;
       } else {
         if (button.id === 'generateToken') button.innerHTML = '<i class="fa-solid fa-key"></i> トークン生成';
-        else if (button.id === 'getCharacter') button.innerHTML = '<i class="fa-solid fa-dice-d20"></i> 取得';
+        else if (button.id === 'getCharacter') button.innerHTML = '<i class="fa-solid fa-dice-d20"></i> 試す';
         button.classList.remove('loading');
         button.disabled = false;
       }
@@ -164,14 +157,14 @@
         const res = await fetch('/api/token', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ expiresIn: expiresInSec })
+          body: JSON.stringify({ expiresIn: expiresInSec === 0 ? 'never' : expiresInSec })
         });
         if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
         const data = await res.json();
         if (data.token) {
           tokenOutput.value = data.token;
           copyBtn.disabled = false;
-          const expiresAt = expiresInSec === 0 ? 0 : Date.now() + expiresInSec * 1000;
+          const expiresAt = data.expiresIn === 'never' ? 0 : Date.now() + parseInt(data.expiresIn) * 1000;
           let tokens = loadTokens();
           if (!tokens.some(t => t.token === data.token)) {
             tokens.push({ token: data.token, expiresAt });
@@ -218,13 +211,11 @@
         return;
       }
       tokenOutput.select();
-      tokenOutput.setSelectionRange(0, 99999);
       document.execCommand('copy');
       alert('トークンをコピーしました！');
     }
 
     renderTokenList();
-
     generateBtn.addEventListener('click', generateToken);
     getCharBtn.addEventListener('click', getCharacter);
     copyBtn.addEventListener('click', copyTokenToClipboard);
