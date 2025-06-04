@@ -11,6 +11,8 @@ const app = express();
 const SECRET_KEY = process.env.SECRET_KEY || 'your-secret-key';
 const CHARACTER_PATH = path.join(process.cwd(), 'character.json');
 
+app.use('/icons', express.static(path.join(process.cwd(), 'icons')));
+
 app.use(express.json());
 
 app.post('/api/token', (req, res) => {
