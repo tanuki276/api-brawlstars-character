@@ -8,7 +8,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
 const SECRET_KEY = process.env.SECRET_KEY || 'your-secret-key';
 const CHARACTER_PATH = path.join(process.cwd(), 'character.json');
 
@@ -80,6 +79,4 @@ app.get('/api/character', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+export default app;
