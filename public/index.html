@@ -5,9 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Brawlchara</title>
   <link rel="stylesheet" href="/style.css" />
+  <!-- FontAwesomeアイコン -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
 </head>
 <body>
-  <h1>Brawlchara</h1>
+  <h1><i class="fa-solid fa-user-ghost"></i> Brawlchara</h1>
+
   <label for="expires">トークン有効期限を選択:</label>
   <select id="expires">
     <option value="3600">1時間</option>
@@ -15,23 +23,19 @@
     <option value="604800">7日間</option>
     <option value="0">無制限</option>
   </select>
-  <button id="generateToken">トークン生成</button>
-  <button id="copyToken" disabled>トークンをコピー</button>
+  <button id="generateToken"><i class="fa-solid fa-key"></i> トークン生成</button>
+  <button id="copyToken" disabled><i class="fa-regular fa-copy"></i> トークンをコピー</button>
+
   <p>生成されたトークン:</p>
   <textarea id="tokenOutput" rows="4" cols="60" readonly></textarea>
+
   <h2>生成済みトークン一覧</h2>
   <ul id="tokenList">
     <li>トークンがありません</li>
   </ul>
+
   <h2>キャラを取得</h2>
-  <label for="lang">言語:</label>
-  <select id="lang">
-    <option value="ja">日本語</option>
-    <option value="en">英語</option>
-    <option value="zh">中国語</option>
-    <option value="ko">韓国語</option>
-  </select>
-  <button id="getCharacter">取得</button>
+  <button id="getCharacter"><i class="fa-solid fa-dice-d20"></i> 取得</button>
   <pre id="characterResult"></pre>
 
   <script>
@@ -49,8 +53,8 @@
         button.classList.add('loading');
         button.disabled = true;
       } else {
-        if (button.id === 'generateToken') button.textContent = 'トークン生成';
-        else if (button.id === 'getCharacter') button.textContent = '取得';
+        if (button.id === 'generateToken') button.innerHTML = '<i class="fa-solid fa-key"></i> トークン生成';
+        else if (button.id === 'getCharacter') button.innerHTML = '<i class="fa-solid fa-dice-d20"></i> 取得';
         button.classList.remove('loading');
         button.disabled = false;
       }
@@ -72,7 +76,7 @@
     function renderTokenList() {
       const tokens = loadTokens();
       if (tokens.length === 0) {
-        tokenList.innerHTML = '<li>トークンがありません';
+        tokenList.innerHTML = '<li>トークンがありません</li>';
         return;
       }
       tokenList.innerHTML = '';
@@ -156,14 +160,13 @@
       setLoading(getCharBtn, true);
       characterResult.textContent = '';
       try {
-        const lang = document.getElementById('lang').value;
-        const res = await fetch(`/api/character?token=${encodeURIComponent(token)}&lang=${lang}`);
+        const res = await fetch(`/api/character?token=${encodeURIComponent(token)}`);
         if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
         const data = await res.json();
         if (data.error) {
           characterResult.textContent = 'エラー: ' + data.error;
         } else {
-   characterResult.textContent = `名前: ${data.name}\nレア度: ${data.rarity}\nタイプ: ${data.role}`;
+          characterResult.textContent = `名前: ${data.name}\nレア度: ${data.rarity}\nタイプ: ${data.role}`;
         }
       } catch (e) {
         characterResult.textContent = `通信エラーが発生しました: ${e.message}`;
@@ -184,10 +187,10 @@
     }
 
     renderTokenList();
+
     generateBtn.addEventListener('click', generateToken);
     getCharBtn.addEventListener('click', getCharacter);
     copyBtn.addEventListener('click', copyTokenToClipboard);
   </script>
 </body>
-
 </html>
