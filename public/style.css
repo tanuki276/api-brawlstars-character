@@ -1,0 +1,112 @@
+body {
+  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+  max-width: 600px;
+  margin: 3em auto;
+  padding: 1em 2em;
+  background: #fef6e4;
+  color: #333;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+  font-size: 3rem;
+  text-align: center;
+  color: #ff6f61;
+  text-shadow: 1px 1px 0 #fff;
+  margin-bottom: 1em;
+}
+
+label, select, button, textarea, pre, ul {
+  display: block;
+  margin-top: 1em;
+}
+
+select {
+  background-color: #fff;
+  border: 2px solid #ff6f61;
+  border-radius: 10px;
+  padding: 0.5em 1em;
+  color: #ff6f61;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+select:hover {
+  border-color: #ff3b2f;
+}
+
+button {
+  background: linear-gradient(45deg, #ff6f61, #ff3b2f);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  padding: 0.8em 1.8em;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(255, 111, 97, 0.5);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  box-shadow: 0 6px 12px rgba(255, 59, 47, 0.7);
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+textarea, pre {
+  width: 100%;
+  border-radius: 10px;
+  border: 2px solid #ff6f61;
+  padding: 1em;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem;
+  background: #fff7f5;
+  color: #333;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+ul {
+  padding-left: 1.5em;
+  list-style-type: disc;
+  color: #555;
+}
+
+li {
+  margin-bottom: 0.6em;
+  font-weight: 600;
+}
+
+li button {
+  margin-left: 0.5em;
+  background: #ff6f61;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 0.2em 0.6em;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+li button:hover {
+  background: #ff3b2f;
+}
+
+code {
+  background: #ffe3df;
+  padding: 2px 5px;
+  border-radius: 5px;
+  font-weight: 700;
+  color: #ff3b2f;
+  font-family: 'Courier New', Courier, monospace;
+}
