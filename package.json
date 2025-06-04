@@ -1,0 +1,20 @@
+{
+  "name": "api-brawlstars-character",
+  "version": "1.0.0",
+  "description": "Brawl Stars character API server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.0",
+    "node-fetch": "^3.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "type": "module",
+  "author": "",
+  "license": "MIT"
+}
