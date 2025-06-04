@@ -33,11 +33,12 @@
       opacity: 0.6;
       cursor: not-allowed;
     }
+    /* ドキュメント埋め込み用のスタイル */
     iframe#docFrame {
-      width: 100%;
-      height: 600px;
-      border: 1px solid #ccc;
-      margin-top: 1rem;
+      width: 100%; /* 親要素の幅いっぱいに */
+      height: 600px; /* ある程度の高さを指定 */
+      border: 1px solid #ccc; /* 枠線を追加 */
+      margin-top: 1rem; /* 上部に余白 */
     }
   </style>
 </head>
@@ -69,6 +70,8 @@
   <h2>キャラを取得</h2>
   <button id="getCharacter"><i class="fa-solid fa-dice-d20"></i> 試す</button>
   <pre id="characterResult"></pre>
+
+  ---
 
   <h2>ドキュメントはこちらから</h2>
   <iframe
