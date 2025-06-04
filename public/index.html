@@ -22,10 +22,30 @@
       text-overflow: ellipsis;
       vertical-align: middle;
     }
+    /* 非公式注意書き */
+    #disclaimer {
+      color: #b00020;
+      font-weight: bold;
+      background: #fff0f0;
+      padding: 10px 15px;
+      border: 2px solid #b00020;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    /* ボタン処理中のスタイル */
+    button.loading {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
   <h1><i class="fa-solid fa-user-ghost"></i> Brawlchara</h1>
+
+  <p id="disclaimer">
+    ※このアプリは公式のサービスではありません。非公式のファンメイドツールです。  
+    ご利用は自己責任でお願いします。
+  </p>
 
   <label for="expires">トークン有効期限を選択:</label>
   <select id="expires">
