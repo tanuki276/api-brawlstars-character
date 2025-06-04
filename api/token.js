@@ -12,7 +12,6 @@ export default function handler(req, res) {
   let signOptions = {};
 
   if (expiresIn === 0 || expiresIn === 'never') {
-    // 無期限
     signOptions = {};
   } else if (typeof expiresIn === 'number') {
     signOptions = { expiresIn: `${expiresIn}s` };
