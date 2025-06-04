@@ -4,9 +4,8 @@ import path from 'path';
 import fetch from 'node-fetch';
 
 const SECRET_KEY = process.env.SECRET_KEY || 'your-secret-key';
-const CHARACTER_PATH = path.resolve('./character.json');
+const CHARACTER_PATH = path.join(process.cwd(), 'character.json');
 
-// MyMemory Translation API
 async function translateText(text, target) {
   if (target === 'ja') return text;
 
@@ -38,7 +37,14 @@ export default async function handler(req, res) {
     return;
   }
 
-  const charactersRaw = fs.readFileSync(CHARACTER_PATH, 'utf8');
+  let charactersRaw;
+  try {
+    charactersRaw = fs.readFileSync(CHARACTER_PATH, 'utf8');
+  } catch (e) {
+    res.status(500).json({ error: '読み込みに失敗しました' });
+    return;
+  }
+
   const characters = JSON.parse(charactersRaw);
   const character = characters[Math.floor(Math.random() * characters.length)];
 
