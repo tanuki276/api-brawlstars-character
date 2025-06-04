@@ -5,20 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Brawlchara</title>
-  <style>
-  body { font-family: sans-serif; max-width: 600px; margin: 2em auto; padding: 0 1em; }
-    label, select, button, textarea, pre, ul { display: block; margin-top: 1em; }
-    textarea { width: 100%; font-family: monospace; }
-    pre { white-space: pre-wrap; background: #eee; padding: 1em; border-radius: 4px; }
-    button { padding: 0.4em 1em; cursor: pointer; }
-    button:disabled { opacity: 0.6; cursor: default; }
-    #tokenOutput { font-family: monospace; }
-    .loading { opacity: 0.6; pointer-events: none; }
-    ul { padding-left: 1em; }
-    li { margin-bottom: 0.5em; }
-    li button { margin-left: 0.5em; }
-    code { background: #f0f0f0; padding: 2px 4px; border-radius: 3px; }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -33,8 +20,7 @@
   <button id="generateToken">トークン生成</button>
   <button id="copyToken" disabled>トークンをコピー</button>
   <p>生成されたトークン:</p>
-  <textarea id="tokenOutput" rows="4" cols="60" readonly>
-  </textarea>
+  <textarea id="tokenOutput" rows="4" cols="60" readonly></textarea>
   <h2>生成済みトークン一覧</h2>
   <ul id="tokenList">
     <li>トークンがありません</li>
@@ -47,17 +33,18 @@
     <option value="zh">中国語</option>
     <option value="ko">韓国語</option>
   </select>
-  <button id="getCharacter">取得</button> <pre id="characterResult"></pre>
+  <button id="getCharacter">取得</button>
+  <pre id="characterResult"></pre>
+
   <script>
-  const generateBtn = document.getElementById('generateToken');
+    const generateBtn = document.getElementById('generateToken');
     const getCharBtn = document.getElementById('getCharacter');
     const copyBtn = document.getElementById('copyToken');
     const tokenOutput = document.getElementById('tokenOutput');
     const characterResult = document.getElementById('characterResult');
     const tokenList = document.getElementById('tokenList');
-  
     const STORAGE_KEY = 'brawlstar_tokens';
-  
+
     function setLoading(button, isLoading) {
       if (isLoading) {
         button.textContent = '処理中...';
@@ -70,8 +57,7 @@
         button.disabled = false;
       }
     }
-  
-    // ローカルストレージからトークン一覧を取得
+
     function loadTokens() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -80,13 +66,11 @@
         return [];
       }
     }
-  
-    // ローカルストレージに保存
+
     function saveTokens(tokens) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens));
     }
-  
-    // トークン一覧画面表示
+
     function renderTokenList() {
       const tokens = loadTokens();
       if (tokens.length === 0) {
@@ -98,15 +82,14 @@
         const expText = expiresAt === 0 ? '無制限' : new Date(expiresAt).toLocaleString();
         const li = document.createElement('li');
         li.innerHTML = `
-          <button data-index="${index}" class="useTokenBtn" title="このトークンを使う">▶
-          <code>${token} 
-          <small>有効期限: ${expText}
-          <button data-index="${index}" class="delTokenBtn" title="削除" style="color:red;">✕
+          <button data-index="${index}" class="useTokenBtn" title="このトークンを使う">▶</button>
+          <code>${token}</code>
+          <small>有効期限: ${expText}</small>
+          <button data-index="${index}" class="delTokenBtn" title="削除" style="color:red;">✕</button>
         `;
         tokenList.appendChild(li);
       });
-  
-      // 利用ボタン
+
       document.querySelectorAll('.useTokenBtn').forEach(btn => {
         btn.onclick = () => {
           const idx = btn.getAttribute('data-index');
@@ -116,8 +99,7 @@
           characterResult.textContent = '';
         };
       });
-  
-      // 削除ボタン
+
       document.querySelectorAll('.delTokenBtn').forEach(btn => {
         btn.onclick = () => {
           const idx = btn.getAttribute('data-index');
@@ -125,7 +107,6 @@
           tokens.splice(idx, 1);
           saveTokens(tokens);
           renderTokenList();
-          // もし今のテキストエリアにあるトークンを削除したら消す
           if (tokenOutput.value && !tokens.some(t => t.token === tokenOutput.value)) {
             tokenOutput.value = '';
             copyBtn.disabled = true;
@@ -134,7 +115,7 @@
         };
       });
     }
-  
+
     async function generateToken() {
       setLoading(generateBtn, true);
       characterResult.textContent = '';
@@ -143,7 +124,7 @@
         const expiresInSec = parseInt(document.getElementById('expires').value, 10);
         const res = await fetch('/api/token', {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ expiresIn: expiresInSec })
         });
         if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
@@ -151,11 +132,7 @@
         if (data.token) {
           tokenOutput.value = data.token;
           copyBtn.disabled = false;
-  
-          // 期限の計算（0は無制限）
           const expiresAt = expiresInSec === 0 ? 0 : Date.now() + expiresInSec * 1000;
-  
-          // 既存トークンと重複排除（同じトークンがなければ追加）
           let tokens = loadTokens();
           if (!tokens.some(t => t.token === data.token)) {
             tokens.push({ token: data.token, expiresAt });
@@ -171,7 +148,7 @@
         setLoading(generateBtn, false);
       }
     }
-  
+
     async function getCharacter() {
       const token = tokenOutput.value.trim();
       if (!token) {
@@ -188,8 +165,7 @@
         if (data.error) {
           characterResult.textContent = 'エラー: ' + data.error;
         } else {
-          characterResult.textContent =
-            `名前: ${data.name}\nレア度: ${data.rarity}\nタイプ: ${data.type}`;
+          characterResult.textContent = `名前: ${data.name}\nレア度: ${data.rarity}\nタイプ: ${data.type}`;
         }
       } catch (e) {
         characterResult.textContent = `通信エラーが発生しました: ${e.message}`;
@@ -197,25 +173,23 @@
         setLoading(getCharBtn, false);
       }
     }
-  
+
     function copyTokenToClipboard() {
       if (!tokenOutput.value) {
         alert('コピーするトークンがありません');
         return;
       }
       tokenOutput.select();
-      tokenOutput.setSelectionRange(0, 99999); // モバイル対応
+      tokenOutput.setSelectionRange(0, 99999);
       document.execCommand('copy');
       alert('トークンをコピーしました！');
     }
-  
-    // 初期表示
+
     renderTokenList();
-  
     generateBtn.addEventListener('click', generateToken);
     getCharBtn.addEventListener('click', getCharacter);
     copyBtn.addEventListener('click', copyTokenToClipboard);
   </script>
 </body>
 
-  </html>
+</html>
