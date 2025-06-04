@@ -12,14 +12,6 @@
 トークンは [公式サイト](https://api-brawlstars-character.vercel.app) にて取得してください。
 
 
-## 🧾 パラメータ（Query）
-
-| パラメータ | 必須 | 説明 |
-|------------|------|------|
-| `token`    | ✅   | 認証用JWT。サイトで生成してください。 |
-| `lang`     | ❌   | 翻訳対象言語（デフォルト: `ja`）<br>例: `en`, `zh`, `fr`など。 |
-
-
 ## 📥 リクエスト例
 
 GET /api/character?token=あなたのトークンを記載してください...&lang=en Host: api-brawlstars-character.vercel.app
