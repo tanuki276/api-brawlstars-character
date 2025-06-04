@@ -163,7 +163,7 @@
         if (data.error) {
           characterResult.textContent = 'エラー: ' + data.error;
         } else {
-          characterResult.textContent = `名前: ${data.name}\nレア度: ${data.rarity}\nタイプ: ${data.type}`;
+   characterResult.textContent = `名前: ${data.name}\nレア度: ${data.rarity}\nタイプ: ${data.role}`;
         }
       } catch (e) {
         characterResult.textContent = `通信エラーが発生しました: ${e.message}`;
