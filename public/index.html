@@ -33,13 +33,13 @@
       opacity: 0.6;
       cursor: not-allowed;
     }
-    /* ドキュメント埋め込み用のスタイル */
-    iframe#docFrame {
-      width: 100%; /* 親要素の幅いっぱいに */
-      height: 600px; /* ある程度の高さを指定 */
-      border: 1px solid #ccc; /* 枠線を追加 */
-      margin-top: 1rem; /* 上部に余白 */
-    }
+    /* iframeのスタイルは不要になるため削除 */
+    /* iframe#docFrame {
+      width: 100%;
+      height: 600px;
+      border: 1px solid #ccc;
+      margin-top: 1rem;
+    } */
   </style>
 </head>
 <body>
@@ -73,13 +73,10 @@
 
   ---
 
-  <h2>ドキュメントはこちらから</h2>
-  <iframe
-    id="docFrame"
-    src="https://document-api-brawl-chara.vercel.app/"
-    title="Brawlchara API ドキュメント"
-    loading="lazy"
-  ></iframe>
+  <h2><i class="fa-solid fa-book"></i> ドキュメントはこちらから</h2>
+  <p>
+    <a href="https://document-api-brawl-chara.vercel.app/" target="_blank" rel="noopener noreferrer">BrawlStars Character API ドキュメントを見る</a>
+  </p>
 
   <script>
     const generateBtn = document.getElementById('generateToken');
