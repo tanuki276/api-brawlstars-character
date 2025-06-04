@@ -14,11 +14,11 @@
 
 ## 📥 リクエスト例
 
-GET /api/character?token=あなたのトークンを記載してください...&lang=en Host: api-brawlstars-character.vercel.app
+GET /api/character?token=あなたのトークンを記載してください... Host: api-brawlstars-character.vercel.app
 
 またはブラウザで：
 
-https://api-brawlstars-character.vercel.app/api/character?token=あなたのトークンを記載してください&lang=en
+https://api-brawlstars-character.vercel.app/api/character?token=あなたのトークンを記載してください
 
 
 ## 📤 レスポンス形式（JSON）
@@ -29,8 +29,6 @@ https://api-brawlstars-character.vercel.app/api/character?token=あなたのト�
   "rarity": "レア度",
   "role": "タイプ"
 }
-
-> ※ rarity と role は指定した lang に翻訳された結果になります。
 
 
 ⚠️ エラーレスポンス例
