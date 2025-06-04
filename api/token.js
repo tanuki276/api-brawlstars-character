@@ -4,16 +4,18 @@ const SECRET_KEY = process.env.SECRET_KEY || 'your-secret-key';
 
 export default function handler(req, res) {
   if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' });
-    return;
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const { expiresIn } = req.body;
 
   let signOptions = {};
 
-  if (expiresIn === 'never') {
+  if (expiresIn === 0 || expiresIn === 'never') {
+    // 無期限
     signOptions = {};
+  } else if (typeof expiresIn === 'number') {
+    signOptions = { expiresIn: `${expiresIn}s` };
   } else if (typeof expiresIn === 'string') {
     signOptions = { expiresIn };
   } else {
