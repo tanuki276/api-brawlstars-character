@@ -3,6 +3,9 @@ import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import path from 'path';
 import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -36,7 +39,7 @@ async function translateText(text, target) {
   try {
     const response = await fetch(url);
     const data = await response.json();
-    if (data && data.responseData && data.responseData.translatedText) {
+    if (data?.responseData?.translatedText) {
       return data.responseData.translatedText;
     }
   } catch (e) {
@@ -72,7 +75,7 @@ app.get('/api/character', async (req, res) => {
       role: translatedRole,
     });
   } catch (err) {
-    console.error(err);
+    console.error('Error reading character.json:', err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
