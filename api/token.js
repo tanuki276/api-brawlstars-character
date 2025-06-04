@@ -10,20 +10,21 @@ export default function handler(req, res) {
 
   const { expiresIn } = req.body;
 
-  let expires;
+  let signOptions = {};
+
   if (expiresIn === 'never') {
-    expires = '100y';
+    signOptions = {};
   } else if (typeof expiresIn === 'string') {
-    expires = expiresIn;
+    signOptions = { expiresIn };
   } else {
-    expires = '1h';
+    signOptions = { expiresIn: '1h' };
   }
 
   const token = jwt.sign(
     { created: Date.now() },
     SECRET_KEY,
-    { expiresIn: expires }
+    signOptions
   );
 
-  res.status(200).json({ token, expiresIn: expires });
-    }
+  res.status(200).json({ token, expiresIn: signOptions.expiresIn || 'never' });
+}
