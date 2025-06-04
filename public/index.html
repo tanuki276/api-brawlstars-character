@@ -12,6 +12,17 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
+  <style>
+    /* css */
+    #tokenList code {
+      display: inline-block;
+      max-width: 300px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+    }
+  </style>
 </head>
 <body>
   <h1><i class="fa-solid fa-user-ghost"></i> Brawlchara</h1>
@@ -73,6 +84,11 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens));
     }
 
+    function shortenToken(token) {
+      if (token.length <= 20) return token;
+      return token.slice(0, 10) + '...' + token.slice(-6);
+    }
+
     function renderTokenList() {
       const tokens = loadTokens();
       if (tokens.length === 0) {
@@ -85,7 +101,7 @@
         const li = document.createElement('li');
         li.innerHTML = `
           <button data-index="${index}" class="useTokenBtn" title="このトークンを使う">▶</button>
-          <code>${token}</code>
+          <code>${shortenToken(token)}</code>
           <small>有効期限: ${expText}</small>
           <button data-index="${index}" class="delTokenBtn" title="削除" style="color:red;">✕</button>
         `;
