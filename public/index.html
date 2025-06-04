@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Brawlchara</title>
   <link rel="stylesheet" href="/style.css" />
-  <!-- FontAwesomeアイコン -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -13,7 +12,6 @@
     referrerpolicy="no-referrer"
   />
   <style>
-    /* css */
     #tokenList code {
       display: inline-block;
       max-width: 300px;
@@ -22,17 +20,20 @@
       text-overflow: ellipsis;
       vertical-align: middle;
     }
-    /* 非公式注意書き */
+    /* css */
     #disclaimer {
-      color: #b00020;
-      font-weight: bold;
-      background: #fff0f0;
-      padding: 10px 15px;
-      border: 2px solid #b00020;
-      border-radius: 6px;
-      margin-bottom: 20px;
+      color: #6b0000;
+      font-weight: 600;
+      font-size: 0.8rem;
+      background: #fff5f5;
+      padding: 5px 10px;
+      border: 1px solid #d48b8b;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      max-width: 320px;
+      line-height: 1.2;
+      user-select: none;
     }
-    /* ボタン処理中のスタイル */
     button.loading {
       opacity: 0.6;
       cursor: not-allowed;
@@ -40,12 +41,12 @@
   </style>
 </head>
 <body>
-  <h1><i class="fa-solid fa-user-ghost"></i> Brawlchara</h1>
-
   <p id="disclaimer">
-    ※このアプリは公式のサービスではありません。非公式のファンメイドツールです。  
+    ※このアプリは公式ではありません。非公式のファンメイドツールです。  
     ご利用は自己責任でお願いします。
   </p>
+
+  <h1><i class="fa-solid fa-user-ghost"></i> Brawlchara</h1>
 
   <label for="expires">トークン有効期限を選択:</label>
   <select id="expires">
