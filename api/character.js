@@ -5,32 +5,27 @@ import fetch from 'node-fetch';
 
 const SECRET_KEY = process.env.SECRET_KEY || 'your-secret-key';
 const CHARACTER_PATH = path.resolve('./character.json');
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
+// MyMemory Translation API
 async function translateText(text, target) {
-  if (!GOOGLE_API_KEY || target === 'ja') return text;
+  if (target === 'ja') return text;
 
-  const url = `https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_API_KEY}`;
-  const body = {
-    q: text,
-    target,
-    format: 'text'
-  };
+  const encodedText = encodeURIComponent(text);
+  const url = `https://api.mymemory.translated.net/get?q=${encodedText}&langpair=ja|${target}`;
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
+  const res = await fetch(url);
   const data = await res.json();
-  if (data && data.data && data.data.translations && data.data.translations[0]) {
-    return data.data.translations[0].translatedText;
+
+  if (data && data.responseData && data.responseData.translatedText) {
+    return data.responseData.translatedText;
   }
+
   return text;
 }
 
 export default async function handler(req, res) {
   const { token, lang = 'ja' } = req.query;
+
   if (!token) {
     res.status(400).json({ error: 'Token is required' });
     return;
@@ -55,4 +50,4 @@ export default async function handler(req, res) {
     rarity: translatedRarity,
     type: translatedType,
   });
-                          }
+}
