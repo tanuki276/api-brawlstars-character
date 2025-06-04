@@ -4,14 +4,18 @@ import fs from 'fs';
 import path from 'path';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const SECRET_KEY = process.env.SECRET_KEY || 'your-secret-key';
-const CHARACTER_PATH = path.join(process.cwd(), 'character.json');
+const CHARACTER_PATH = path.join(__dirname, 'character.json');
 
-app.use('/icons', express.static(path.join(process.cwd(), 'icons')));
+app.use('/icons', express.static(path.join(__dirname, 'icons')));
 
 app.use(express.json());
 
