@@ -1,88 +1,23 @@
-import express from 'express';
-import jwt from 'jsonwebtoken';
-import fs from 'fs';
-import path from 'path';
-import fetch from 'node-fetch';
-import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-
-dotenv.config();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const app = express();
-const SECRET_KEY = process.env.SECRET_KEY || 'your-secret-key';
-const CHARACTER_PATH = path.join(__dirname, 'character.json');
-
-app.use('/public', express.static(path.join(__dirname, 'icons')));
-
-app.use(express.json());
-
-app.post('/api/token', (req, res) => {
-  const { expiresIn } = req.body;
-  let expires;
-  if (expiresIn === 'never' || expiresIn === 0) {
-    expires = '100y';
-  } else if (typeof expiresIn === 'string') {
-    expires = expiresIn;
-  } else if (typeof expiresIn === 'number') {
-    expires = `${expiresIn}s`;
-  } else {
-    expires = '1h';
-  }
-
-  const token = jwt.sign({ created: Date.now() }, SECRET_KEY, { expiresIn: expires });
-  res.json({ token, expiresIn: expires });
-});
-
-async function translateText(text, target) {
-  if (target === 'ja') return text;
-  const encodedText = encodeURIComponent(text);
-  const url = `https://api.mymemory.translated.net/get?q=${encodedText}&langpair=ja|${target}`;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    if (data?.responseData?.translatedText) {
-      return data.responseData.translatedText;
-    }
-  } catch (e) {
-    console.error('Translation API error:', e);
-  }
-  return text;
+{
+  "name": "api-brawlstars-character",
+  "version": "1.1.1",
+  "description": "Brawl Stars character API server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.0",
+    "node-fetch": "^3.3.1",
+    "bcrypt": "^5.1.0",
+    "express": "^4.18.2",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "type": "module",
+  "author": "",
+  "license": "MIT"
 }
-
-app.get('/api/character', async (req, res) => {
-  const { token, lang = 'ja' } = req.query;
-  if (!token) {
-    res.status(400).json({ error: 'Token is required' });
-    return;
-  }
-
-  try {
-    jwt.verify(token, SECRET_KEY);
-  } catch {
-    res.status(401).json({ error: 'Invalid or expired token' });
-    return;
-  }
-
-  try {
-    const charactersRaw = fs.readFileSync(CHARACTER_PATH, 'utf8');
-    const characters = JSON.parse(charactersRaw);
-    const character = characters[Math.floor(Math.random() * characters.length)];
-    const translatedRarity = await translateText(character.rarity, lang);
-    const translatedRole = await translateText(character.role, lang);
-
-    res.json({
-      name: character.name,
-      rarity: translatedRarity,
-      role: translatedRole,
-    });
-  } catch (err) {
-    console.error('Error reading character.json:', err);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-export default app;
