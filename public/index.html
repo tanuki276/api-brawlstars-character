@@ -5,8 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Brawlchara</title>
   <link rel="stylesheet" href="/style.css" />
-  <link rel="icon" href="/public/32×32.png" type="image/png" sizes="32×32" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" href="/public/32x32.png" type="image/png" sizes="32x32" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+    integrity="sha512-pow2/kF71JY8fmsqLPqme0YP60s7fFTE9BTG+fU+4D9yC0YcSxYFHV96qRNhxrOeMEZLk0+NuX3G0VGxhJ6pHQ=="
+  />
   <style>
     #tokenList code {
       display: inline-block;
@@ -111,36 +117,43 @@
 
     function renderTokenList() {
       const tokens = loadTokens();
-      tokenList.innerHTML = tokens.length === 0
-        ? '<li>トークンがありません</li>'
-        : '';
-      tokens.forEach(({ token, expiresAt }, index) => {
-        const expText = expiresAt === 0 ? '無制限' : new Date(expiresAt).toLocaleString();
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <button data-index="${index}" class="useTokenBtn" title="このトークンを使う">▶</button>
-          <code>${shortenToken(token)}</code>
-          <small>有効期限: ${expText}</small>
-          <button data-index="${index}" class="delTokenBtn" title="削除" style="color:red;">✕</button>
-        `;
-        tokenList.appendChild(li);
-      });
+      tokenList.innerHTML = '';
 
-      document.querySelectorAll('.useTokenBtn').forEach(btn => {
-        btn.onclick = () => {
-          const idx = btn.dataset.index;
+      if (tokens.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'トークンがありません';
+        tokenList.appendChild(li);
+        return;
+      }
+
+      tokens.forEach(({ token, expiresAt }, index) => {
+        const li = document.createElement('li');
+
+        const useBtn = document.createElement('button');
+        useBtn.textContent = '▶';
+        useBtn.title = 'このトークンを使う';
+        useBtn.dataset.index = index;
+        useBtn.addEventListener('click', () => {
           const tokens = loadTokens();
-          tokenOutput.value = tokens[idx].token;
+          tokenOutput.value = tokens[index].token;
           copyBtn.disabled = false;
           characterResult.textContent = '';
-        };
-      });
+        });
 
-      document.querySelectorAll('.delTokenBtn').forEach(btn => {
-        btn.onclick = () => {
-          const idx = btn.dataset.index;
+        const code = document.createElement('code');
+        code.textContent = shortenToken(token);
+
+        const expSmall = document.createElement('small');
+        expSmall.textContent = '有効期限: ' + (expiresAt === 0 ? '無制限' : new Date(expiresAt).toLocaleString());
+
+        const delBtn = document.createElement('button');
+        delBtn.textContent = '✕';
+        delBtn.title = '削除';
+        delBtn.style.color = 'red';
+        delBtn.dataset.index = index;
+        delBtn.addEventListener('click', () => {
           let tokens = loadTokens();
-          tokens.splice(idx, 1);
+          tokens.splice(index, 1);
           saveTokens(tokens);
           renderTokenList();
           if (tokenOutput.value && !tokens.some(t => t.token === tokenOutput.value)) {
@@ -148,7 +161,17 @@
             copyBtn.disabled = true;
             characterResult.textContent = '';
           }
-        };
+        });
+
+        li.appendChild(useBtn);
+        li.appendChild(document.createTextNode(' '));
+        li.appendChild(code);
+        li.appendChild(document.createTextNode(' '));
+        li.appendChild(expSmall);
+        li.appendChild(document.createTextNode(' '));
+        li.appendChild(delBtn);
+
+        tokenList.appendChild(li);
       });
     }
 
@@ -191,7 +214,11 @@
       setLoading(getCharBtn, true);
       characterResult.textContent = '';
       try {
-        const res = await fetch(`/api/character?token=${encodeURIComponent(token)}`);
+        const res = await fetch('/api/character', {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
         if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
         const data = await res.json();
         characterResult.textContent = data.error
