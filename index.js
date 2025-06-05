@@ -16,7 +16,6 @@ const SECRET_KEY = process.env.SECRET_KEY || 'your-secret-key';
 const CHARACTER_PATH = path.join(__dirname, 'character.json');
 
 app.use('/public', express.static(path.join(__dirname, 'icons')));
-
 app.use(express.json());
 
 app.post('/api/token', (req, res) => {
@@ -54,7 +53,9 @@ async function translateText(text, target) {
 }
 
 app.get('/api/character', async (req, res) => {
-  const { token, lang = 'ja' } = req.query;
+
+  const { token, lang = 'ja', rarity, role, count = 1, blockedIds } = req.query; 
+
   if (!token) {
     res.status(400).json({ error: 'Token is required' });
     return;
@@ -69,18 +70,60 @@ app.get('/api/character', async (req, res) => {
 
   try {
     const charactersRaw = fs.readFileSync(CHARACTER_PATH, 'utf8');
-    const characters = JSON.parse(charactersRaw);
-    const character = characters[Math.floor(Math.random() * characters.length)];
-    const translatedRarity = await translateText(character.rarity, lang);
-    const translatedRole = await translateText(character.role, lang);
+    let characters = JSON.parse(charactersRaw);
+    
+    let parsedBlockedIds = [];
+    if (blockedIds) {
+      parsedBlockedIds = blockedIds.split(',').map(id => id.trim()).filter(id => id !== '');
+    }
 
-    res.json({
-      name: character.name,
-      rarity: translatedRarity,
-      role: translatedRole,
-    });
+    let filteredCharacters = characters;
+
+    if (rarity) {
+      const decodedRarity = decodeURIComponent(rarity);
+      filteredCharacters = filteredCharacters.filter(char => char.rarity === decodedRarity);
+    }
+
+    if (role) {
+      const decodedRole = decodeURIComponent(role);
+      filteredCharacters = filteredCharacters.filter(char => char.role === decodedRole);
+    }
+
+    if (parsedBlockedIds.length > 0) {
+      filteredCharacters = filteredCharacters.filter(char => !parsedBlockedIds.includes(char.id));
+    }
+
+    if (filteredCharacters.length === 0) {
+      res.status(404).json({ error: 'No characters found with the specified criteria after filtering and blocking.' });
+      return;
+    }
+
+    const numToRetrieve = Math.max(1, Math.min(parseInt(count, 10) || 1, filteredCharacters.length));
+
+    const selectedCharacters = [];
+    for (let i = 0; i < numToRetrieve; i++) {
+      const randomIndex = Math.floor(Math.random() * filteredCharacters.length);
+      selectedCharacters.push(filteredCharacters.splice(randomIndex, 1)[0]);
+    }
+
+    const results = await Promise.all(selectedCharacters.map(async (char) => {
+      const translatedRarity = await translateText(char.rarity, lang);
+      const translatedRole = await translateText(char.role, lang);
+      return {
+        name: char.name,
+        rarity: translatedRarity,
+        role: translatedRole,
+      };
+    }));
+
+    if (results.length === 1) {
+      res.json(results[0]);
+    } else {
+      res.json(results);
+    }
+
   } catch (err) {
-    console.error('Error reading character.json:', err);
+    console.error('Error in /api/character:', err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
