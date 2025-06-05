@@ -233,7 +233,10 @@
 
     async function getCharacter() {
       const token = tokenOutput.value.trim();
-      if (!token) return;
+      if (!token) {
+        alert('▶でトークンを選択するかトークンを生成してください');
+        return;
+      }
       setLoading(getCharBtn, true);
       characterResult.textContent = '';
       try {
