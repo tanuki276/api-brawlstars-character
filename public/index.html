@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Brawlchara</title>
   <link rel="stylesheet" href="/style.css" />
-  <link rel="icon" href="/public/32x32.png" type="image/png" sizes="32x32" />
+  <link rel="icon" href="/public/32×32.png" type="image/png" sizes="32×32" />
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
-    integrity="sha512-pow2/kF71JY8fmsqLPqme0YP60s7fFTE9BTG+fU+4D9yC0YcSxYFHV96qRNhxrOeMEZLk0+NuX3G0VGxhJ6pHQ=="
   />
   <style>
     #tokenList code {
@@ -45,9 +44,10 @@
   <p id="disclaimer">
     ※このツールはBrawlStars公式のものではありません。非公式のファンメイドツールです。
   </p>
-
-  <h1><i class="fa-solid fa-user-ghost"></i>Brawlchara<small style="color: red;"></small></h1>
-
+  <h1>
+    <i class="fa-solid fa-user-ghost"></i>Brawlchara
+    <small style="color: red;"></small>
+  </h1>
   <label for="expires">トークン有効期限を選択:</label>
   <select id="expires">
     <option value="3600">1時間</option>
@@ -60,21 +60,22 @@
 
   <p>生成されたトークン:</p>
   <textarea id="tokenOutput" rows="4" cols="60" readonly></textarea>
-
   <h2>生成済みトークン一覧</h2>
   <ul id="tokenList">
     <li>トークンがありません</li>
   </ul>
-
   <h2>キャラを取得</h2>
   <button id="getCharacter"><i class="fa-solid fa-dice-d20"></i> 試す</button>
   <pre id="characterResult"></pre>
-
   <h2><i class="fa-solid fa-book"></i> ドキュメントはこちらから</h2>
   <p>
-    <a href="https://document-api-brawl-chara.vercel.app/" target="_blank" rel="noopener noreferrer">BrawlStars Character API ドキュメントを見る</a>
+    <a
+      href="https://document-api-brawl-chara.vercel.app/"
+      target="_blank"
+      rel="noopener noreferrer"
+      >BrawlStars Character API ドキュメントを見る</a
+    >
   </p>
-
   <script>
     const generateBtn = document.getElementById('generateToken');
     const getCharBtn = document.getElementById('getCharacter');
@@ -85,11 +86,11 @@
     const STORAGE_KEY = 'brawlstar_tokens';
 
     function setLoading(button, isLoading) {
-      button.innerHTML = isLoading ? '処理中...' : (
-        button.id === 'generateToken'
-          ? '<i class="fa-solid fa-key"></i> トークン生成'
-          : '<i class="fa-solid fa-dice-d20"></i> 試す'
-      );
+      button.innerHTML = isLoading
+        ? '処理中...'
+        : button.id === 'generateToken'
+        ? '<i class="fa-solid fa-key"></i> トークン生成'
+        : '<i class="fa-solid fa-dice-d20"></i> 試す';
       button.classList.toggle('loading', isLoading);
       button.disabled = isLoading;
     }
@@ -112,7 +113,9 @@
     }
 
     function shortenToken(token) {
-      return token.length <= 20 ? token : token.slice(0, 10) + '...' + token.slice(-6);
+      return token.length <= 20
+        ? token
+        : token.slice(0, 10) + '...' + token.slice(-6);
     }
 
     function renderTokenList() {
@@ -127,51 +130,63 @@
       }
 
       tokens.forEach(({ token, expiresAt }, index) => {
+        const expText =
+          expiresAt === 0 ? '無制限' : new Date(expiresAt).toLocaleString();
+
         const li = document.createElement('li');
 
         const useBtn = document.createElement('button');
-        useBtn.textContent = '▶';
-        useBtn.title = 'このトークンを使う';
         useBtn.dataset.index = index;
-        useBtn.addEventListener('click', () => {
-          const tokens = loadTokens();
-          tokenOutput.value = tokens[index].token;
-          copyBtn.disabled = false;
-          characterResult.textContent = '';
-        });
+        useBtn.className = 'useTokenBtn';
+        useBtn.title = 'このトークンを使う';
+        useBtn.textContent = '▶';
 
         const code = document.createElement('code');
         code.textContent = shortenToken(token);
 
-        const expSmall = document.createElement('small');
-        expSmall.textContent = '有効期限: ' + (expiresAt === 0 ? '無制限' : new Date(expiresAt).toLocaleString());
+        const small = document.createElement('small');
+        small.textContent = `有効期限: ${expText}`;
 
         const delBtn = document.createElement('button');
-        delBtn.textContent = '✕';
+        delBtn.dataset.index = index;
+        delBtn.className = 'delTokenBtn';
         delBtn.title = '削除';
         delBtn.style.color = 'red';
-        delBtn.dataset.index = index;
-        delBtn.addEventListener('click', () => {
+        delBtn.textContent = '✕';
+
+        li.appendChild(useBtn);
+        li.appendChild(code);
+        li.appendChild(small);
+        li.appendChild(delBtn);
+        tokenList.appendChild(li);
+      });
+
+      document.querySelectorAll('.useTokenBtn').forEach(btn => {
+        btn.onclick = () => {
+          const idx = btn.dataset.index;
+          const tokens = loadTokens();
+          tokenOutput.value = tokens[idx].token;
+          copyBtn.disabled = false;
+          characterResult.textContent = '';
+        };
+      });
+
+      document.querySelectorAll('.delTokenBtn').forEach(btn => {
+        btn.onclick = () => {
+          const idx = btn.dataset.index;
           let tokens = loadTokens();
-          tokens.splice(index, 1);
+          tokens.splice(idx, 1);
           saveTokens(tokens);
           renderTokenList();
-          if (tokenOutput.value && !tokens.some(t => t.token === tokenOutput.value)) {
+          if (
+            tokenOutput.value &&
+            !tokens.some(t => t.token === tokenOutput.value)
+          ) {
             tokenOutput.value = '';
             copyBtn.disabled = true;
             characterResult.textContent = '';
           }
-        });
-
-        li.appendChild(useBtn);
-        li.appendChild(document.createTextNode(' '));
-        li.appendChild(code);
-        li.appendChild(document.createTextNode(' '));
-        li.appendChild(expSmall);
-        li.appendChild(document.createTextNode(' '));
-        li.appendChild(delBtn);
-
-        tokenList.appendChild(li);
+        };
       });
     }
 
@@ -180,18 +195,26 @@
       characterResult.textContent = '';
       copyBtn.disabled = true;
       try {
-        const expiresInSec = parseInt(document.getElementById('expires').value, 10);
+        const expiresInSec = parseInt(
+          document.getElementById('expires').value,
+          10
+        );
         const res = await fetch('/api/token', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ expiresIn: expiresInSec === 0 ? 'never' : expiresInSec })
+          body: JSON.stringify({
+            expiresIn: expiresInSec === 0 ? 'never' : expiresInSec,
+          }),
         });
         if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
         const data = await res.json();
         if (data.token) {
           tokenOutput.value = data.token;
           copyBtn.disabled = false;
-          const expiresAt = data.expiresIn === 'never' ? 0 : Date.now() + parseInt(data.expiresIn) * 1000;
+          const expiresAt =
+            data.expiresIn === 'never'
+              ? 0
+              : Date.now() + parseInt(data.expiresIn) * 1000;
           let tokens = loadTokens();
           if (!tokens.some(t => t.token === data.token)) {
             tokens.push({ token: data.token, expiresAt });
@@ -214,11 +237,7 @@
       setLoading(getCharBtn, true);
       characterResult.textContent = '';
       try {
-        const res = await fetch('/api/character', {
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        });
+        const res = await fetch(`/api/character?token=${encodeURIComponent(token)}`);
         if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
         const data = await res.json();
         characterResult.textContent = data.error
