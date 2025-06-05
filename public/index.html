@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Brawlchara</title>
+  <title>Brawlchara Token Generator（非公式）</title>
   <link rel="stylesheet" href="/style.css" />
   <link rel="icon" href="/public/32×32.png" type="image/png" sizes="32×32" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -33,21 +33,14 @@
       opacity: 0.6;
       cursor: not-allowed;
     }
-    /* iframeのスタイルは不要になるため削除 */
-    /* iframe#docFrame {
-      width: 100%;
-      height: 600px;
-      border: 1px solid #ccc;
-      margin-top: 1rem;
-    } */
   </style>
 </head>
 <body>
   <p id="disclaimer">
-    ※このアプリは公式ではありません。非公式のファンメイドツールです。ご利用は自己責任でお願いします。
+    ※このツールはBrawlchara公式のものではありません。非公式のファンメイドツールです。
   </p>
 
-  <h1><i class="fa-solid fa-user-ghost"></i> Brawlchara</h1>
+  <h1><i class="fa-solid fa-user-ghost"></i> Brawlchara Token Generator <small style="color: red;">（非公式）</small></h1>
 
   <label for="expires">トークン有効期限を選択:</label>
   <select id="expires">
@@ -71,8 +64,6 @@
   <button id="getCharacter"><i class="fa-solid fa-dice-d20"></i> 試す</button>
   <pre id="characterResult"></pre>
 
-  ---
-
   <h2><i class="fa-solid fa-book"></i> ドキュメントはこちらから</h2>
   <p>
     <a href="https://document-api-brawl-chara.vercel.app/" target="_blank" rel="noopener noreferrer">BrawlStars Character API ドキュメントを見る</a>
@@ -88,22 +79,23 @@
     const STORAGE_KEY = 'brawlstar_tokens';
 
     function setLoading(button, isLoading) {
-      if (isLoading) {
-        button.textContent = '処理中...';
-        button.classList.add('loading');
-        button.disabled = true;
-      } else {
-        if (button.id === 'generateToken') button.innerHTML = '<i class="fa-solid fa-key"></i> トークン生成';
-        else if (button.id === 'getCharacter') button.innerHTML = '<i class="fa-solid fa-dice-d20"></i> 試す';
-        button.classList.remove('loading');
-        button.disabled = false;
-      }
+      button.innerHTML = isLoading ? '処理中...' : (
+        button.id === 'generateToken'
+          ? '<i class="fa-solid fa-key"></i> トークン生成'
+          : '<i class="fa-solid fa-dice-d20"></i> 試す'
+      );
+      button.classList.toggle('loading', isLoading);
+      button.disabled = isLoading;
     }
 
     function loadTokens() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? JSON.parse(raw) : [];
+        let tokens = raw ? JSON.parse(raw) : [];
+        const now = Date.now();
+        tokens = tokens.filter(t => t.expiresAt === 0 || t.expiresAt > now);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens));
+        return tokens;
       } catch {
         return [];
       }
@@ -114,17 +106,14 @@
     }
 
     function shortenToken(token) {
-      if (token.length <= 20) return token;
-      return token.slice(0, 10) + '...' + token.slice(-6);
+      return token.length <= 20 ? token : token.slice(0, 10) + '...' + token.slice(-6);
     }
 
     function renderTokenList() {
       const tokens = loadTokens();
-      if (tokens.length === 0) {
-        tokenList.innerHTML = '<li>トークンがありません</li>';
-        return;
-      }
-      tokenList.innerHTML = '';
+      tokenList.innerHTML = tokens.length === 0
+        ? '<li>トークンがありません</li>'
+        : '';
       tokens.forEach(({ token, expiresAt }, index) => {
         const expText = expiresAt === 0 ? '無制限' : new Date(expiresAt).toLocaleString();
         const li = document.createElement('li');
@@ -139,7 +128,7 @@
 
       document.querySelectorAll('.useTokenBtn').forEach(btn => {
         btn.onclick = () => {
-          const idx = btn.getAttribute('data-index');
+          const idx = btn.dataset.index;
           const tokens = loadTokens();
           tokenOutput.value = tokens[idx].token;
           copyBtn.disabled = false;
@@ -149,7 +138,7 @@
 
       document.querySelectorAll('.delTokenBtn').forEach(btn => {
         btn.onclick = () => {
-          const idx = btn.getAttribute('data-index');
+          const idx = btn.dataset.index;
           let tokens = loadTokens();
           tokens.splice(idx, 1);
           saveTokens(tokens);
@@ -198,21 +187,16 @@
 
     async function getCharacter() {
       const token = tokenOutput.value.trim();
-      if (!token) {
-        alert('まずトークンを生成または選択してください');
-        return;
-      }
+      if (!token) return;
       setLoading(getCharBtn, true);
       characterResult.textContent = '';
       try {
         const res = await fetch(`/api/character?token=${encodeURIComponent(token)}`);
         if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
         const data = await res.json();
-        if (data.error) {
-          characterResult.textContent = 'エラー: ' + data.error;
-        } else {
-          characterResult.textContent = `名前: ${data.name}\nレア度: ${data.rarity}\nタイプ: ${data.role}`;
-        }
+        characterResult.textContent = data.error
+          ? 'エラー: ' + data.error
+          : `名前: ${data.name}\nレア度: ${data.rarity}\nタイプ: ${data.role}`;
       } catch (e) {
         characterResult.textContent = `通信エラーが発生しました: ${e.message}`;
       } finally {
@@ -220,14 +204,14 @@
       }
     }
 
-    function copyTokenToClipboard() {
-      if (!tokenOutput.value) {
-        alert('コピーするトークンがありません');
-        return;
+    async function copyTokenToClipboard() {
+      if (!tokenOutput.value) return;
+      try {
+        await navigator.clipboard.writeText(tokenOutput.value);
+        console.log('トークンをコピーしました');
+      } catch (err) {
+        console.error('クリップボードへのコピーに失敗:', err);
       }
-      tokenOutput.select();
-      document.execCommand('copy');
-      alert('トークンをコピーしました！');
     }
 
     renderTokenList();
