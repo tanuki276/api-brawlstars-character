@@ -53,8 +53,7 @@ async function translateText(text, target) {
 }
 
 app.get('/api/character', async (req, res) => {
-
-  const { token, lang = 'ja', rarity, role, count = 1, blockedIds } = req.query; 
+  const { token, lang = 'ja', rarity, role, count = 1, blockedIds } = req.query;
 
   if (!token) {
     res.status(400).json({ error: 'Token is required' });
@@ -71,7 +70,7 @@ app.get('/api/character', async (req, res) => {
   try {
     const charactersRaw = fs.readFileSync(CHARACTER_PATH, 'utf8');
     let characters = JSON.parse(charactersRaw);
-    
+
     let parsedBlockedIds = [];
     if (blockedIds) {
       parsedBlockedIds = blockedIds.split(',').map(id => id.trim()).filter(id => id !== '');
@@ -123,8 +122,51 @@ app.get('/api/character', async (req, res) => {
     }
 
   } catch (err) {
-    console.error('Error in /api/character:', err);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/api/cookie', async (req, res) => {
+  const { consent, timestamp } = req.body;
+
+  if (!process.env.DISCORD_WEBHOOK_URL) {
+    return res.status(500).json({ error: 'サーバー設定エラー: 送信処理が設定されていません' });
+  }
+
+  if (consent !== 'accepted' || !timestamp) {
+    return res.status(400).json({ error: '無効な同意情報です。' });
+  }
+
+  const discordMessage = {
+    embeds: [
+      {
+        title: "クッキー同意通知",
+        description: "ユーザーがクッキーに同意しました。",
+        color: 5763719,
+        fields: [
+          { name: "同意状況", value: "同意済み", inline: true },
+          { name: "タイムスタンプ", value: new Date(timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }), inline: true }
+        ],
+        timestamp: new Date().toISOString(),
+        footer: { text: "Brawlchara Cookie Consent" }
+      }
+    ]
+  };
+
+  try {
+    const discordRes = await fetch(process.env.DISCORD_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(discordMessage),
+    });
+
+    if (!discordRes.ok) {
+      return res.status(500).json({ error: 'Discordへの送信に失敗しました。' });
+    }
+
+    res.status(200).json({ message: '同意情報を受け付けました。' });
+  } catch {
+    res.status(500).json({ error: 'サーバー内部エラーが発生しました。' });
   }
 });
 
