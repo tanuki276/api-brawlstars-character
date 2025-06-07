@@ -3,10 +3,10 @@ import fs from 'fs';
 import path from 'path';
 
 const SECRET_KEY = process.env.SECRET_KEY || 'your-secret-key';
-const CHARACTER_PATH = path.join(process.cwd(), 'character.json');
+const DATA_PATH = path.join(process.cwd(), 'data.json');
 
 export default async function handler(req, res) {
-  const { token } = req.query;
+  const { token, query } = req.query;
 
   if (!token) {
     res.status(400).json({ error: 'Token is required' });
@@ -20,18 +20,37 @@ export default async function handler(req, res) {
     return;
   }
 
-  try {
-    const charactersRaw = fs.readFileSync(CHARACTER_PATH, 'utf8');
-    const characters = JSON.parse(charactersRaw);
-    const character = characters[Math.floor(Math.random() * characters.length)];
+  if (!query) {
+    res.status(400).json({ error: 'Query parameter is required' });
+    return;
+  }
 
-    res.status(200).json({
-      name: character.name,
-      rarity: character.rarity,
-      role: character.role,
-    });
+  try {
+    const rawData = fs.readFileSync(DATA_PATH, 'utf8');
+    const data = JSON.parse(rawData);
+    const keywords = data.keywords;
+    const defaultResponse = data.default_response;
+
+    let response = defaultResponse;
+
+    for (const key of Object.keys(keywords)) {
+      if (query === key) {
+        response = keywords[key];
+        break;
+      }
+      if (query.startsWith(key) && query.length > key.length) {
+        response = keywords[key];
+        break;
+      }
+      if (query.includes(key)) {
+        response = keywords[key];
+        break;
+      }
+    }
+
+    res.status(200).json({ response });
   } catch (err) {
-    console.error('Error reading or parsing character.json:', err);
+    console.error('Error reading or parsing data.json:', err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
