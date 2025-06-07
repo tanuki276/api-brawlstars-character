@@ -317,18 +317,18 @@
 
     function checkCookieConsent() {
       const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
-      console.log('Cookie Consent Status:', consent); // デバッグ用
+      console.log('Cookie Consent Status:', consent);
       return consent === 'accepted';
     }
 
     function showCookieConsentUi(show) {
-      console.log('Show Cookie Consent UI:', show); // デバッグ用
+      console.log('Show Cookie Consent UI:', show);
       cookieConsentDiv.style.display = show ? 'block' : 'none';
     }
 
     async function sendCookieConsentToDiscord() {
       try {
-        const response = await fetch('/api/cookie.js', {
+        const response = await fetch('/api/cookie', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -359,7 +359,7 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('DOM Content Loaded'); // デバッグ用
+      console.log('DOM Content Loaded');
       if (!checkCookieConsent()) {
         showCookieConsentUi(true);
       } else {
