@@ -44,29 +44,48 @@
       left: 0;
       width: 100%;
       background-color: #333;
-      color: white;
-      padding: 15px;
+      color: #fff;
+      padding: 20px;
       text-align: center;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
       z-index: 1000;
       display: none;
-      font-size: 0.9em;
+      font-size: 1rem;
+      font-family: 'Arial', sans-serif;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    #cookieConsent .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
     }
     #cookieConsent button {
-      background-color: #007bff;
+      background-color: #4CAF50;
       color: white;
       border: none;
-      padding: 8px 15px;
-      margin: 0 5px;
-      border-radius: 4px;
+      padding: 10px 20px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 0.9em;
+      font-size: 1rem;
+      transition: transform 0.2s, opacity 0.2s;
     }
     #cookieConsent button:hover {
-      opacity: 0.9;
+      transform: scale(1.05);
+      opacity: 0.95;
     }
     #cookieConsent button.no {
-        background-color: #6c757d;
+      background-color: #f44336;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -106,17 +125,16 @@
       >マニュアルを見る</a
     >
   </p>
-
   <p>
     <a href="https://a-b-c.vercel.app/" target="_blank" rel="noopener noreferrer">お問い合わせ</a>
   </p>
-
   <div id="cookieConsent">
-    当サイトではクッキーを使用しております。同意しますか？
-    <button id="acceptCookie">はい</button>
-    <button id="declineCookie" class="no">いいえ</button>
+    当サイトはクッキーを使用します。同意しますか？
+    <div class="button-container">
+      <button id="acceptCookie">同意する</button>
+      <button id="declineCookie" class="no">拒否する</button>
+    </div>
   </div>
-
   <script>
     const generateBtn = document.getElementById('generateToken');
     const getCharBtn = document.getElementById('getCharacter');
@@ -125,12 +143,10 @@
     const characterResult = document.getElementById('characterResult');
     const tokenList = document.getElementById('tokenList');
     const STORAGE_KEY = 'brawlstar_tokens';
-
     const cookieConsentDiv = document.getElementById('cookieConsent');
     const acceptCookieBtn = document.getElementById('acceptCookie');
     const declineCookieBtn = document.getElementById('declineCookie');
     const COOKIE_CONSENT_KEY = 'cookieConsent';
-
     function setLoading(button, isLoading) {
       button.innerHTML = isLoading
         ? '処理中...'
@@ -140,7 +156,6 @@
       button.classList.toggle('loading', isLoading);
       button.disabled = isLoading;
     }
-
     function loadTokens() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -153,60 +168,48 @@
         return [];
       }
     }
-
     function saveTokens(tokens) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens));
     }
-
     function shortenToken(token) {
       return token.length <= 20
         ? token
         : token.slice(0, 10) + '...' + token.slice(-6);
     }
-
     function renderTokenList() {
       const tokens = loadTokens();
       tokenList.innerHTML = '';
-
       if (tokens.length === 0) {
         const li = document.createElement('li');
         li.textContent = 'トークンがありません';
         tokenList.appendChild(li);
         return;
       }
-
       tokens.forEach(({ token, expiresAt }, index) => {
         const expText =
           expiresAt === 0 ? '無制限' : new Date(expiresAt).toLocaleString();
-
         const li = document.createElement('li');
-
         const useBtn = document.createElement('button');
         useBtn.dataset.index = index;
         useBtn.className = 'useTokenBtn';
         useBtn.title = 'このトークンを使う';
         useBtn.textContent = '▶';
-
         const code = document.createElement('code');
         code.textContent = shortenToken(token);
-
         const small = document.createElement('small');
         small.textContent = `有効期限: ${expText}`;
-
         const delBtn = document.createElement('button');
         delBtn.dataset.index = index;
         delBtn.className = 'delTokenBtn';
         delBtn.title = '削除';
         delBtn.style.color = 'red';
         delBtn.textContent = '✕';
-
         li.appendChild(useBtn);
         li.appendChild(code);
         li.appendChild(small);
         li.appendChild(delBtn);
         tokenList.appendChild(li);
       });
-
       document.querySelectorAll('.useTokenBtn').forEach(btn => {
         btn.onclick = () => {
           const idx = btn.dataset.index;
@@ -216,7 +219,6 @@
           characterResult.textContent = '';
         };
       });
-
       document.querySelectorAll('.delTokenBtn').forEach(btn => {
         btn.onclick = () => {
           const idx = btn.dataset.index;
@@ -235,7 +237,6 @@
         };
       });
     }
-
     async function generateToken() {
       setLoading(generateBtn, true);
       characterResult.textContent = '';
@@ -276,7 +277,6 @@
         setLoading(generateBtn, false);
       }
     }
-
     async function getCharacter() {
       const token = tokenOutput.value.trim();
       if (!token) {
@@ -298,7 +298,6 @@
         setLoading(getCharBtn, false);
       }
     }
-
     async function copyTokenToClipboard() {
       if (!tokenOutput.value) return;
       try {
@@ -308,16 +307,12 @@
         console.error('クリップボードへのコピーに失敗:', err);
       }
     }
-
-
     function checkCookieConsent() {
       return localStorage.getItem(COOKIE_CONSENT_KEY) === 'accepted';
     }
-
     function showCookieConsentUi(show) {
       cookieConsentDiv.style.display = show ? 'block' : 'none';
     }
-
     async function sendCookieConsentToDiscord() {
       try {
         const response = await fetch('/api/cookie.js', {
@@ -336,25 +331,21 @@
         console.error('Discordへの同意情報送信中にエラーが発生しました:', error);
       }
     }
-
     acceptCookieBtn.addEventListener('click', () => {
       localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted');
       sendCookieConsentToDiscord();
       showCookieConsentUi(false);
     });
-
     declineCookieBtn.addEventListener('click', () => {
       localStorage.removeItem(COOKIE_CONSENT_KEY);
       showCookieConsentUi(false);
     });
-
     document.addEventListener('DOMContentLoaded', () => {
       if (!checkCookieConsent()) {
         showCookieConsentUi(true);
       }
       renderTokenList();
     });
-
     generateBtn.addEventListener('click', generateToken);
     getCharBtn.addEventListener('click', getCharacter);
     copyBtn.addEventListener('click', copyTokenToClipboard);
