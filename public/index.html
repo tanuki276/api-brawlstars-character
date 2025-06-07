@@ -106,7 +106,6 @@
   </select>
   <button id="generateToken"><i class="fa-solid fa-key"></i> トークン生成</button>
   <button id="copyToken" disabled><i class="fa-regular fa-copy"></i> トークンをコピー</button>
-
   <p>生成されたトークン:</p>
   <textarea id="tokenOutput" rows="4" cols="60" readonly></textarea>
   <h2>生成済みトークン一覧</h2>
@@ -147,6 +146,7 @@
     const acceptCookieBtn = document.getElementById('acceptCookie');
     const declineCookieBtn = document.getElementById('declineCookie');
     const COOKIE_CONSENT_KEY = 'cookieConsent';
+
     function setLoading(button, isLoading) {
       button.innerHTML = isLoading
         ? '処理中...'
@@ -156,6 +156,7 @@
       button.classList.toggle('loading', isLoading);
       button.disabled = isLoading;
     }
+
     function loadTokens() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -168,14 +169,17 @@
         return [];
       }
     }
+
     function saveTokens(tokens) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens));
     }
+
     function shortenToken(token) {
       return token.length <= 20
         ? token
         : token.slice(0, 10) + '...' + token.slice(-6);
     }
+
     function renderTokenList() {
       const tokens = loadTokens();
       tokenList.innerHTML = '';
@@ -237,6 +241,7 @@
         };
       });
     }
+
     async function generateToken() {
       setLoading(generateBtn, true);
       characterResult.textContent = '';
@@ -277,6 +282,7 @@
         setLoading(generateBtn, false);
       }
     }
+
     async function getCharacter() {
       const token = tokenOutput.value.trim();
       if (!token) {
@@ -298,6 +304,7 @@
         setLoading(getCharBtn, false);
       }
     }
+
     async function copyTokenToClipboard() {
       if (!tokenOutput.value) return;
       try {
@@ -307,12 +314,18 @@
         console.error('クリップボードへのコピーに失敗:', err);
       }
     }
+
     function checkCookieConsent() {
-      return localStorage.getItem(COOKIE_CONSENT_KEY) === 'accepted';
+      const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
+      console.log('Cookie Consent Status:', consent); // デバッグ用
+      return consent === 'accepted';
     }
+
     function showCookieConsentUi(show) {
+      console.log('Show Cookie Consent UI:', show); // デバッグ用
       cookieConsentDiv.style.display = show ? 'block' : 'none';
     }
+
     async function sendCookieConsentToDiscord() {
       try {
         const response = await fetch('/api/cookie.js', {
@@ -323,29 +336,38 @@
           body: JSON.stringify({ consent: 'accepted', timestamp: new Date().toISOString() }),
         });
         if (!response.ok) {
-          console.error('Discordへの同意情報送信に失敗しました。');
+          console.error('エラーが発生しました');
         } else {
-          console.log('Discordへ同意情報を送信しました。');
+          console.log('ご協力ありがとうございます！');
         }
       } catch (error) {
-        console.error('Discordへの同意情報送信中にエラーが発生しました:', error);
+        console.error('エラーが発生しました:', error);
       }
     }
+
     acceptCookieBtn.addEventListener('click', () => {
+      console.log('Accept Cookie Clicked');
       localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted');
       sendCookieConsentToDiscord();
       showCookieConsentUi(false);
     });
+
     declineCookieBtn.addEventListener('click', () => {
+      console.log('Decline Cookie Clicked');
       localStorage.removeItem(COOKIE_CONSENT_KEY);
       showCookieConsentUi(false);
     });
+
     document.addEventListener('DOMContentLoaded', () => {
+      console.log('DOM Content Loaded'); // デバッグ用
       if (!checkCookieConsent()) {
         showCookieConsentUi(true);
+      } else {
+        showCookieConsentUi(false);
       }
       renderTokenList();
     });
+
     generateBtn.addEventListener('click', generateToken);
     getCharBtn.addEventListener('click', getCharacter);
     copyBtn.addEventListener('click', copyTokenToClipboard);
