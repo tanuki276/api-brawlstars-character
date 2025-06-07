@@ -1,15 +1,13 @@
-const express = require('express');
-const router = express.Router();
 const fetch = require('node-fetch');
 
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL || "Discord Webhook URL";
 
-/**
- * @route POST /api/cookie
- * @desc 送信
- * @access Public
- */
-router.post('/cookie', async (req, res) => {
+module.exports = async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method Not Allowed' });
+    return;
+  }
+
   const { consent, timestamp } = req.body;
 
   if (!DISCORD_WEBHOOK_URL) {
@@ -26,11 +24,11 @@ router.post('/cookie', async (req, res) => {
       {
         title: "クッキー同意通知",
         description: "ユーザーがクッキーに同意しました。",
-        color: 5763719, // 緑色
+        color: 5763719,
         fields: [
           {
             name: "同意状況",
-            value: consent === 'accepted' ? "同意済み" : "不明",
+            value: "同意済み",
             inline: true
           },
           {
@@ -69,6 +67,4 @@ router.post('/cookie', async (req, res) => {
     console.error('Discordへの送信中にエラーが発生しました:', error);
     res.status(500).json({ error: 'サーバー内部エラーが発生しました。' });
   }
-});
-
-module.exports = router;
+};
