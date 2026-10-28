@@ -5,99 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Brawlchara</title>
   <link rel="stylesheet" href="/style.css" />
-  <link rel="icon" href="/public/32×32.png" type="image/png" sizes="32×32" />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
+  <link rel="icon" href="/32×32.png" type="image/png" sizes="32×32" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
-    #tokenList code {
-      display: inline-block;
-      max-width: 300px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      vertical-align: middle;
-    }
-    #disclaimer {
-      color: #6b0000;
-      font-weight: 600;
-      font-size: 0.8rem;
-      background: #fff5f5;
-      padding: 5px 10px;
-      border: 1px solid #d48b8b;
-      border-radius: 4px;
-      margin-bottom: 8px;
-      max-width: 320px;
-      line-height: 1.2;
-      user-select: none;
-    }
-    button.loading {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    #cookieConsent {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: #333;
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
-      z-index: 1000;
-      display: none;
-      font-size: 1rem;
-      font-family: 'Arial', sans-serif;
-      animation: fadeIn 0.5s ease-in-out;
-    }
-    #cookieConsent .button-container {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    #cookieConsent button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: transform 0.2s, opacity 0.2s;
-    }
-    #cookieConsent button:hover {
-      transform: scale(1.05);
-      opacity: 0.95;
-    }
-    #cookieConsent button.no {
-      background-color: #f44336;
-    }
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+    #disclaimer { color:#6b0000; font-weight:600; font-size:.8rem; background:#fff5f5; padding:5px 10px; border:1px solid #d48b8b; border-radius:4px; max-width:420px; }
+    #tokenList code { display:inline-block; max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; vertical-align:middle; }
+    button.loading { opacity:.6; cursor:not-allowed; }
+    .character-controls { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:14px; }
+    #characterResult { max-width:760px; }
+    .character-card { border:1px solid #ddd; border-radius:16px; padding:18px; background:#fff; box-shadow:0 4px 16px rgba(0,0,0,.08); }
+    .character-head { display:flex; gap:18px; align-items:center; }
+    .character-icon { width:128px; height:128px; object-fit:contain; }
+    .character-meta h3 { margin:0 0 6px; font-size:1.8rem; }
+    .character-meta p { margin:4px 0; }
+    .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:8px; margin:16px 0; }
+    .stat { border:1px solid #e4e4e4; border-radius:10px; padding:10px; }
+    .stat strong { display:block; font-size:.8rem; opacity:.7; }
+    .ability-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:10px; }
+    .ability { display:flex; gap:10px; border:1px solid #e4e4e4; border-radius:10px; padding:10px; align-items:flex-start; }
+    .ability img { width:54px; height:54px; object-fit:contain; flex:none; }
+    .ability h4 { margin:0 0 4px; }
+    .ability p { margin:0; font-size:.9rem; line-height:1.35; }
+    .muted { opacity:.65; }
+    .error { color:#b00020; white-space:pre-wrap; }
+    #cookieConsent { position:fixed; bottom:0; left:0; width:100%; box-sizing:border-box; background:#333; color:#fff; padding:20px; text-align:center; box-shadow:0 -4px 12px rgba(0,0,0,.3); z-index:1000; display:none; }
+    #cookieConsent .button-container { display:flex; justify-content:center; gap:10px; margin-top:10px; }
+    #cookieConsent button { background:#4CAF50; color:#fff; border:0; padding:10px 20px; border-radius:8px; cursor:pointer; }
+    #cookieConsent button.no { background:#f44336; }
+    @media (max-width:560px) { .character-head { align-items:flex-start; } .character-icon { width:96px; height:96px; } }
   </style>
 </head>
 <body>
-  <p id="disclaimer">
-    ※このツールはBrawlStars公式のものではありません。非公式のファンメイドツールです。
-  </p>
-  <h1>
-    <i class="fa-solid fa-user-ghost"></i>Brawlchara
-    <small style="color: red;"></small>
-  </h1>
-  <label for="expires">トークン有効期限を選択:</label>
+  <p id="disclaimer">※このツールはBrawl Stars公式のものではありません。非公式のファンメイドツールです。</p>
+  <h1><i class="fa-solid fa-user-ghost"></i> Brawlchara</h1>
+
+  <label for="expires">トークン有効期限:</label>
   <select id="expires">
     <option value="3600">1時間</option>
     <option value="86400">24時間</option>
@@ -108,25 +50,22 @@
   <button id="copyToken" disabled><i class="fa-regular fa-copy"></i> トークンをコピー</button>
   <p>生成されたトークン:</p>
   <textarea id="tokenOutput" rows="4" cols="60" readonly></textarea>
+
   <h2>生成済みトークン一覧</h2>
-  <ul id="tokenList">
-    <li>トークンがありません</li>
-  </ul>
+  <ul id="tokenList"><li>トークンがありません</li></ul>
+
   <h2>キャラを取得</h2>
-  <button id="getCharacter"><i class="fa-solid fa-dice-d20"></i> 試す</button>
-  <pre id="characterResult"></pre>
-  <h2><i class="fa-solid fa-book"></i> ドキュメントはこちらから</h2>
-  <p>
-    <a
-      href="https://document-api-brawl-chara.vercel.app/"
-      target="_blank"
-      rel="noopener noreferrer"
-      >マニュアルを見る</a
-    >
-  </p>
-  <p>
-    <a href="https://a-b-c.vercel.app/" target="_blank" rel="noopener noreferrer">お問い合わせ</a>
-  </p>
+  <div class="character-controls">
+    <label for="powerLevel">パワーレベル:</label>
+    <select id="powerLevel"></select>
+    <button id="getCharacter"><i class="fa-solid fa-dice-d20"></i> 試す</button>
+  </div>
+  <div id="characterResult" aria-live="polite"></div>
+
+  <h2><i class="fa-solid fa-book"></i> ドキュメント</h2>
+  <p><a href="https://document-api-brawl-chara.vercel.app/" target="_blank" rel="noopener noreferrer">マニュアルを見る</a></p>
+  <p><a href="https://a-b-c.vercel.app/" target="_blank" rel="noopener noreferrer">お問い合わせ</a></p>
+
   <div id="cookieConsent">
     当サイトはクッキーを使用します。同意しますか？
     <div class="button-container">
@@ -134,6 +73,7 @@
       <button id="declineCookie" class="no">拒否する</button>
     </div>
   </div>
+
   <script>
     const generateBtn = document.getElementById('generateToken');
     const getCharBtn = document.getElementById('getCharacter');
@@ -141,233 +81,158 @@
     const tokenOutput = document.getElementById('tokenOutput');
     const characterResult = document.getElementById('characterResult');
     const tokenList = document.getElementById('tokenList');
+    const powerLevel = document.getElementById('powerLevel');
     const STORAGE_KEY = 'brawlstar_tokens';
-    const cookieConsentDiv = document.getElementById('cookieConsent');
-    const acceptCookieBtn = document.getElementById('acceptCookie');
-    const declineCookieBtn = document.getElementById('declineCookie');
     const COOKIE_CONSENT_KEY = 'cookieConsent';
 
-    function setLoading(button, isLoading) {
-      button.innerHTML = isLoading
-        ? '処理中...'
-        : button.id === 'generateToken'
-        ? '<i class="fa-solid fa-key"></i> トークン生成'
-        : '<i class="fa-solid fa-dice-d20"></i> 試す';
-      button.classList.toggle('loading', isLoading);
-      button.disabled = isLoading;
+    for (let level = 11; level >= 1; level -= 1) {
+      const option = document.createElement('option');
+      option.value = String(level);
+      option.textContent = `パワー ${level}`;
+      powerLevel.appendChild(option);
+    }
+
+    function setLoading(button, loading) {
+      button.classList.toggle('loading', loading);
+      button.disabled = loading;
+      if (button === generateBtn) button.innerHTML = loading ? '処理中...' : '<i class="fa-solid fa-key"></i> トークン生成';
+      if (button === getCharBtn) button.innerHTML = loading ? '取得中...' : '<i class="fa-solid fa-dice-d20"></i> 試す';
     }
 
     function loadTokens() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        let tokens = raw ? JSON.parse(raw) : [];
+        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
         const now = Date.now();
-        tokens = tokens.filter(t => t.expiresAt === 0 || t.expiresAt > now);
+        const tokens = stored.filter((item) => item.expiresAt === 0 || item.expiresAt > now);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens));
         return tokens;
-      } catch {
-        return [];
-      }
+      } catch { return []; }
     }
 
-    function saveTokens(tokens) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens));
-    }
-
-    function shortenToken(token) {
-      return token.length <= 20
-        ? token
-        : token.slice(0, 10) + '...' + token.slice(-6);
-    }
+    function saveTokens(tokens) { localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens)); }
+    function shortenToken(token) { return token.length <= 20 ? token : `${token.slice(0, 10)}...${token.slice(-6)}`; }
 
     function renderTokenList() {
       const tokens = loadTokens();
-      tokenList.innerHTML = '';
-      if (tokens.length === 0) {
-        const li = document.createElement('li');
-        li.textContent = 'トークンがありません';
-        tokenList.appendChild(li);
-        return;
+      tokenList.replaceChildren();
+      if (!tokens.length) {
+        const li = document.createElement('li'); li.textContent = 'トークンがありません'; tokenList.appendChild(li); return;
       }
       tokens.forEach(({ token, expiresAt }, index) => {
-        const expText =
-          expiresAt === 0 ? '無制限' : new Date(expiresAt).toLocaleString();
         const li = document.createElement('li');
-        const useBtn = document.createElement('button');
-        useBtn.dataset.index = index;
-        useBtn.className = 'useTokenBtn';
-        useBtn.title = 'このトークンを使う';
-        useBtn.textContent = '▶';
-        const code = document.createElement('code');
-        code.textContent = shortenToken(token);
-        const small = document.createElement('small');
-        small.textContent = `有効期限: ${expText}`;
-        const delBtn = document.createElement('button');
-        delBtn.dataset.index = index;
-        delBtn.className = 'delTokenBtn';
-        delBtn.title = '削除';
-        delBtn.style.color = 'red';
-        delBtn.textContent = '✕';
-        li.appendChild(useBtn);
-        li.appendChild(code);
-        li.appendChild(small);
-        li.appendChild(delBtn);
-        tokenList.appendChild(li);
-      });
-      document.querySelectorAll('.useTokenBtn').forEach(btn => {
-        btn.onclick = () => {
-          const idx = btn.dataset.index;
-          const tokens = loadTokens();
-          tokenOutput.value = tokens[idx].token;
-          copyBtn.disabled = false;
-          characterResult.textContent = '';
-        };
-      });
-      document.querySelectorAll('.delTokenBtn').forEach(btn => {
-        btn.onclick = () => {
-          const idx = btn.dataset.index;
-          let tokens = loadTokens();
-          tokens.splice(idx, 1);
-          saveTokens(tokens);
-          renderTokenList();
-          if (
-            tokenOutput.value &&
-            !tokens.some(t => t.token === tokenOutput.value)
-          ) {
-            tokenOutput.value = '';
-            copyBtn.disabled = true;
-            characterResult.textContent = '';
-          }
-        };
+        const use = document.createElement('button'); use.textContent = '▶'; use.title = 'このトークンを使う';
+        const code = document.createElement('code'); code.textContent = shortenToken(token);
+        const small = document.createElement('small'); small.textContent = ` 有効期限: ${expiresAt === 0 ? '無制限' : new Date(expiresAt).toLocaleString()}`;
+        const remove = document.createElement('button'); remove.textContent = '✕'; remove.title = '削除'; remove.style.color = 'red';
+        use.onclick = () => { tokenOutput.value = loadTokens()[index]?.token || ''; copyBtn.disabled = !tokenOutput.value; };
+        remove.onclick = () => { const next = loadTokens(); next.splice(index, 1); saveTokens(next); renderTokenList(); };
+        li.append(use, code, small, remove); tokenList.appendChild(li);
       });
     }
 
     async function generateToken() {
       setLoading(generateBtn, true);
-      characterResult.textContent = '';
-      copyBtn.disabled = true;
       try {
-        const expiresInSec = parseInt(
-          document.getElementById('expires').value,
-          10
-        );
-        const res = await fetch('/api/token', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            expiresIn: expiresInSec === 0 ? 'never' : expiresInSec,
-          }),
+        const seconds = Number(document.getElementById('expires').value);
+        const response = await fetch('/api/token', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ expiresIn: seconds === 0 ? 'never' : seconds }),
         });
-        if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
-        const data = await res.json();
-        if (data.token) {
-          tokenOutput.value = data.token;
-          copyBtn.disabled = false;
-          const expiresAt =
-            data.expiresIn === 'never'
-              ? 0
-              : Date.now() + parseInt(data.expiresIn) * 1000;
-          let tokens = loadTokens();
-          if (!tokens.some(t => t.token === data.token)) {
-            tokens.push({ token: data.token, expiresAt });
-            saveTokens(tokens);
-            renderTokenList();
-          }
-        } else {
-          tokenOutput.value = 'トークン生成に失敗しました';
-        }
-      } catch (e) {
-        tokenOutput.value = `エラーが発生しました: ${e.message}`;
-      } finally {
-        setLoading(generateBtn, false);
+        const data = await response.json();
+        if (!response.ok || !data.token) throw new Error(data.error || `HTTP ${response.status}`);
+        tokenOutput.value = data.token; copyBtn.disabled = false;
+        const expiresAt = data.expiresIn === 'never' ? 0 : Date.now() + Number.parseInt(data.expiresIn, 10) * 1000;
+        const tokens = loadTokens();
+        if (!tokens.some((item) => item.token === data.token)) tokens.push({ token: data.token, expiresAt });
+        saveTokens(tokens); renderTokenList();
+      } catch (error) { tokenOutput.value = `エラー: ${error.message}`; }
+      finally { setLoading(generateBtn, false); }
+    }
+
+    function stat(label, value, suffix = '') {
+      const box = document.createElement('div'); box.className = 'stat';
+      const title = document.createElement('strong'); title.textContent = label;
+      const body = document.createElement('span'); body.textContent = value == null ? 'データなし' : `${value}${suffix}`;
+      box.append(title, body); return box;
+    }
+
+    function renderAbilities(title, items) {
+      const section = document.createElement('section');
+      const heading = document.createElement('h3'); heading.textContent = title; section.appendChild(heading);
+      if (!items?.length) {
+        const empty = document.createElement('p'); empty.className = 'muted'; empty.textContent = 'データなし'; section.appendChild(empty); return section;
       }
+      const grid = document.createElement('div'); grid.className = 'ability-grid';
+      items.forEach((item) => {
+        const card = document.createElement('div'); card.className = 'ability';
+        if (item.image) { const img = document.createElement('img'); img.src = item.image; img.alt = item.name || ''; img.loading = 'lazy'; card.appendChild(img); }
+        const text = document.createElement('div');
+        const name = document.createElement('h4'); name.textContent = item.name || '名称不明';
+        const desc = document.createElement('p'); desc.textContent = item.description || '説明なし';
+        text.append(name, desc); card.appendChild(text); grid.appendChild(card);
+      });
+      section.appendChild(grid); return section;
+    }
+
+    function renderCharacter(data) {
+      characterResult.replaceChildren();
+      const card = document.createElement('article'); card.className = 'character-card';
+      const head = document.createElement('div'); head.className = 'character-head';
+      const img = document.createElement('img'); img.className = 'character-icon'; img.src = data.image || ''; img.alt = `${data.name}のアイコン`;
+      const meta = document.createElement('div'); meta.className = 'character-meta';
+      const name = document.createElement('h3'); name.textContent = data.name;
+      const rarity = document.createElement('p'); rarity.textContent = `レア度: ${data.rarity}`;
+      const role = document.createElement('p'); role.textContent = `タイプ: ${data.role}`;
+      const id = document.createElement('p'); id.className = 'muted'; id.textContent = `ID: ${data.id}`;
+      meta.append(name, rarity, role, id); head.append(img, meta); card.appendChild(head);
+
+      if (data.stats) {
+        const h = document.createElement('h3'); h.textContent = `ステータス（パワー ${data.stats.level}）`; card.appendChild(h);
+        const grid = document.createElement('div'); grid.className = 'stats-grid';
+        grid.append(
+          stat('HP', data.stats.health), stat('攻撃ダメージ / 1ヒット', data.stats.attackDamage),
+          stat('1攻撃の弾数', data.stats.projectilesPerAttack), stat('リロード', data.stats.reloadMs, ' ms'),
+          stat('射程', data.stats.range, ' マス'), stat('移動速度', data.stats.moveSpeed), stat('弾数', data.stats.ammo)
+        );
+        card.appendChild(grid);
+      } else {
+        const unavailable = document.createElement('p'); unavailable.className = 'muted'; unavailable.textContent = 'ステータスデータを取得できませんでした。'; card.appendChild(unavailable);
+      }
+
+      card.append(renderAbilities('ガジェット', data.gadgets), renderAbilities('スターパワー', data.starPowers));
+      characterResult.appendChild(card);
     }
 
     async function getCharacter() {
       const token = tokenOutput.value.trim();
-      if (!token) {
-        alert('▶でトークンを選択するかトークンを生成してください');
-        return;
-      }
-      setLoading(getCharBtn, true);
-      characterResult.textContent = '';
+      if (!token) { alert('トークンを選択または生成してください'); return; }
+      setLoading(getCharBtn, true); characterResult.replaceChildren();
       try {
-        const res = await fetch(`/api/character?token=${encodeURIComponent(token)}`);
-        if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
-        const data = await res.json();
-        characterResult.textContent = data.error
-          ? 'エラー: ' + data.error
-          : `名前: ${data.name}\nレア度: ${data.rarity}\nタイプ: ${data.role}`;
-      } catch (e) {
-        characterResult.textContent = `通信エラーが発生しました: ${e.message}`;
-      } finally {
-        setLoading(getCharBtn, false);
-      }
+        const response = await fetch(`/api/character?level=${encodeURIComponent(powerLevel.value)}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+        renderCharacter(data);
+      } catch (error) {
+        const message = document.createElement('p'); message.className = 'error'; message.textContent = `通信エラー: ${error.message}`; characterResult.appendChild(message);
+      } finally { setLoading(getCharBtn, false); }
     }
 
     async function copyTokenToClipboard() {
-      if (!tokenOutput.value) return;
-      try {
-        await navigator.clipboard.writeText(tokenOutput.value);
-        console.log('トークンをコピーしました');
-      } catch (err) {
-        console.error('クリップボードへのコピーに失敗:', err);
-      }
+      if (tokenOutput.value) await navigator.clipboard.writeText(tokenOutput.value);
     }
 
-    function checkCookieConsent() {
-      const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
-      console.log('Cookie Consent Status:', consent);
-      return consent === 'accepted';
-    }
-
-    function showCookieConsentUi(show) {
-      console.log('Show Cookie Consent UI:', show);
-      cookieConsentDiv.style.display = show ? 'block' : 'none';
-    }
-
+    function showCookieConsentUi(show) { document.getElementById('cookieConsent').style.display = show ? 'block' : 'none'; }
     async function sendCookieConsentToDiscord() {
       try {
-        const response = await fetch('/api/cookie', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ consent: 'accepted', timestamp: new Date().toISOString() }),
-        });
-        if (!response.ok) {
-          console.error('エラーが発生しました');
-        } else {
-          console.log('ご協力ありがとうございます！');
-        }
-      } catch (error) {
-        console.error('エラーが発生しました:', error);
-      }
+        await fetch('/api/cookie', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ consent:'accepted', timestamp:new Date().toISOString() }) });
+      } catch (error) { console.error(error); }
     }
 
-    acceptCookieBtn.addEventListener('click', () => {
-      console.log('Accept Cookie Clicked');
-      localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted');
-      sendCookieConsentToDiscord();
-      showCookieConsentUi(false);
-    });
-
-    declineCookieBtn.addEventListener('click', () => {
-      console.log('Decline Cookie Clicked');
-      localStorage.removeItem(COOKIE_CONSENT_KEY);
-      showCookieConsentUi(false);
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('DOM Content Loaded');
-      if (!checkCookieConsent()) {
-        showCookieConsentUi(true);
-      } else {
-        showCookieConsentUi(false);
-      }
-      renderTokenList();
-    });
-
+    document.getElementById('acceptCookie').onclick = () => { localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted'); sendCookieConsentToDiscord(); showCookieConsentUi(false); };
+    document.getElementById('declineCookie').onclick = () => { localStorage.setItem(COOKIE_CONSENT_KEY, 'declined'); showCookieConsentUi(false); };
+    document.addEventListener('DOMContentLoaded', () => { showCookieConsentUi(!localStorage.getItem(COOKIE_CONSENT_KEY)); renderTokenList(); });
     generateBtn.addEventListener('click', generateToken);
     getCharBtn.addEventListener('click', getCharacter);
     copyBtn.addEventListener('click', copyTokenToClipboard);
