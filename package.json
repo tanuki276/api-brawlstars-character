@@ -1,8 +1,11 @@
 {
   "name": "BrawlChara",
-  "version": "1.5.4",
+  "version": "1.6.0",
   "description": "Brawl Stars character API for Vercel Functions",
   "type": "module",
+  "scripts": {
+    "sync:data": "node scripts/sync-character-data.mjs"
+  },
   "dependencies": {
     "jsonwebtoken": "^9.0.0"
   },

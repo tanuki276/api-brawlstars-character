@@ -1,472 +1,117 @@
-[
-  {
-    "name": "シェリー",
-    "rarity": "レア",
-    "role": "アタッカー"
-  },
-  {
-    "name": "ニタ",
-    "rarity": "レア",
-    "role": "アタッカー"
-  },
-  {
-    "name": "コルト",
-    "rarity": "レア",
-    "role": "アタッカー"
-  },
-  {
-    "name": "ブル",
-    "rarity": "レア",
-    "role": "タンク"
-  },
-  {
-    "name": "ブロック",
-    "rarity": "レア",
-    "role": "スナイパー"
-  },
-  {
-    "name": "エルプリモ",
-    "rarity": "レア",
-    "role": "タンク"
-  },
-  {
-    "name": "バーリー",
-    "rarity": "レア",
-    "role": "グレネーディア"
-  },
-  {
-    "name": "ポコ",
-    "rarity": "レア",
-    "role": "サポート"
-  },
-  {
-    "name": "ローサ",
-    "rarity": "レア",
-    "role": "タンク"
-  },
-  {
-    "name": "ジェシー",
-    "rarity": "スーパー",
-    "role": "コントローラー"
-  },
-  {
-    "name": "ダイナマイク",
-    "rarity": "スーパー",
-    "role": "グレネーディア"
-  },
-  {
-    "name": "ティック",
-    "rarity": "スーパー",
-    "role": "グレネーディア"
-  },
-  {
-    "name": "8ビット",
-    "rarity": "スーパー",
-    "role": "アタッカー"
-  },
-  {
-    "name": "リコ",
-    "rarity": "スーパー",
-    "role": "アタッカー"
-  },
-  {
-    "name": "ダリル",
-    "rarity": "スーパー",
-    "role": "タンク"
-  },
-  {
-    "name": "ペニー",
-    "rarity": "スーパー",
-    "role": "コントローラー"
-  },
-  {
-    "name": "カール",
-    "rarity": "スーパー",
-    "role": "アタッカー"
-  },
-  {
-    "name": "ジャッキー",
-    "rarity": "スーパー",
-    "role": "タンク"
-  },
-  {
-    "name": "ガス",
-    "rarity": "スーパー",
-    "role": "サポート"
-  },
-  {
-    "name": "ボウ",
-    "rarity": "ハイパー",
-    "role": "コントローラー"
-  },
-  {
-    "name": "Emz",
-    "rarity": "ハイパー",
-    "role": "コントローラー"
-  },
-  {
-    "name": "ストゥー",
-    "rarity": "ハイパー",
-    "role": "アサシン"
-  },
-  {
-    "name": "エリザベス",
-    "rarity": "ハイパー",
-    "role": "スナイパー"
-  },
-  {
-    "name": "パム",
-    "rarity": "ハイパー",
-    "role": "サポート"
-  },
-  {
-    "name": "フランケン",
-    "rarity": "ハイパー",
-    "role": "タンク"
-  },
-  {
-    "name": "ビビ",
-    "rarity": "ハイパー",
-    "role": "タンク"
-  },
-  {
-    "name": "ビー",
-    "rarity": "ハイパー",
-    "role": "スナイパー"
-  },
-  {
-    "name": "ナーニ",
-    "rarity": "ハイパー",
-    "role": "スナイパー"
-  },
-  {
-    "name": "エドガー",
-    "rarity": "ハイパー",
-    "role": "アサシン"
-  },
-  {
-    "name": "グリフ",
-    "rarity": "ハイパー",
-    "role": "コントローラー"
-  },
-  {
-    "name": "グロム",
-    "rarity": "ハイパー",
-    "role": "グレネーディア"
-  },
-  {
-    "name": "ボニー",
-    "rarity": "ハイパー",
-    "role": "スナイパー"
-  },
-  {
-    "name": "ゲイル",
-    "rarity": "ハイパー",
-    "role": "コントローラー"
-  },
-  {
-    "name": "コレット",
-    "rarity": "ハイパー",
-    "role": "アタッカー"
-  },
-  {
-    "name": "ベル",
-    "rarity": "ハイパー",
-    "role": "スナイパー"
-  },
-  {
-    "name": "アッシュ",
-    "rarity": "ハイパー",
-    "role": "タンク"
-  },
-  {
-    "name": "ローラ",
-    "rarity": "ハイパー",
-    "role": "アタッカー"
-  },
-  {
-    "name": "サム",
-    "rarity": "ハイパー",
-    "role": "アサシン"
-  },
-  {
-    "name": "マンディ",
-    "rarity": "ハイパー",
-    "role": "スナイパー"
-  },
-  {
-    "name": "ハンク",
-    "rarity": "ハイパー",
-    "role": "タンク"
-  },
-  {
-    "name": "パール",
-    "rarity": "ハイパー",
-    "role": "アタッカー"
-  },
-  {
-    "name": "ラリー&ローリー",
-    "rarity": "ハイパー",
-    "role": "グレネーディア"
-  },
-  {
-    "name": "アンジェロ",
-    "rarity": "ハイパー",
-    "role": "スナイパー"
-  },
-  {
-    "name": "ベリー",
-    "rarity": "ハイパー",
-    "role": "サポート"
-  },
-  {
-    "name": "シェイド",
-    "rarity": "ハイパー",
-    "role": "アサシン"
-  },
-  {
-    "name": "ミープル",
-    "rarity": "ハイパー",
-    "role": "コントローラー"
-  },
-  {
-    "name": "モーティス",
-    "rarity": "ウルトラ",
-    "role": "アサシン"
-  },
-  {
-    "name": "タラ",
-    "rarity": "ウルトラ",
-    "role": "アタッカー"
-  },
-  {
-    "name": "ジーン",
-    "rarity": "ウルトラ",
-    "role": "コントローラー"
-  },
-  {
-    "name": "MAX",
-    "rarity": "ウルトラ",
-    "role": "サポート"
-  },
-  {
-    "name": "ミスターP",
-    "rarity": "ウルトラ",
-    "role": "コントローラー"
-  },
-  {
-    "name": "スプラウト",
-    "rarity": "ウルトラ",
-    "role": "グレネーディア"
-  },
-  {
-    "name": "バイロン",
-    "rarity": "ウルトラ",
-    "role": "サポート"
-  },
-  {
-    "name": "スクウィーク",
-    "rarity": "ウルトラ",
-    "role": "コントローラー"
-  },
-  {
-    "name": "ルー",
-    "rarity": "ウルトラ",
-    "role": "コントローラー"
-  },
-  {
-    "name": "ラフス",
-    "rarity": "ウルトラ",
-    "role": "サポート"
-  },
-  {
-    "name": "バズ",
-    "rarity": "ウルトラ",
-    "role": "アサシン"
-  },
-  {
-    "name": "ファング",
-    "rarity": "ウルトラ",
-    "role": "アサシン"
-  },
-  {
-    "name": "イヴ",
-    "rarity": "ウルトラ",
-    "role": "アタッカー"
-  },
-  {
-    "name": "ジャネット",
-    "rarity": "ウルトラ",
-    "role": "スナイパー"
-  },
-  {
-    "name": "オーティス",
-    "rarity": "ウルトラ",
-    "role": "コントローラー"
-  },
-  {
-    "name": "バスター",
-    "rarity": "ウルトラ",
-    "role": "タンク"
-  },
-  {
-    "name": "グレイ",
-    "rarity": "ウルトラ",
-    "role": "サポート"
-  },
-  {
-    "name": "R-T",
-    "rarity": "ウルトラ",
-    "role": "アタッカー"
-  },
-  {
-    "name": "ウィロー",
-    "rarity": "ウルトラ",
-    "role": "コントローラー"
-  },
-  {
-    "name": "チャック",
-    "rarity": "ウルトラ",
-    "role": "アタッカー"
-  },
-  {
-    "name": "チャーリー",
-    "rarity": "ウルトラ",
-    "role": "コントローラー"
-  },
-  {
-    "name": "メロディー",
-    "rarity": "ウルトラ",
-    "role": "アサシン"
-  },
-  {
-    "name": "リリー",
-    "rarity": "ウルトラ",
-    "role": "アサシン"
-  },
-  {
-    "name": "クランシー",
-    "rarity": "ウルトラ",
-    "role": "アタッカー"
-  },
-  {
-    "name": "モー",
-    "rarity": "ウルトラ",
-    "role": "アタッカー"
-  },
-  {
-    "name": "ジュジュ",
-    "rarity": "ウルトラ",
-    "role": "グレネーディア"
-  },
-  {
-    "name": "オーリー",
-    "rarity": "ウルトラ",
-    "role": "タンク"
-  },
-  {
-    "name": "フィンクス",
-    "rarity": "ウルトラ",
-    "role": "コントローラー"
-  },
-  {
-    "name": "ルミ",
-    "rarity": "ウルトラ",
-    "role": "アタッカー"
-  },
-  {
-    "name": "カゼ",
-    "rarity": "ウルトラレジェンドレア",
-    "role": "アサシン"
-  },
-  {
-    "name": "スパイク",
-    "rarity": "レジェンド",
-    "role": "アタッカー"
-  },
-  {
-    "name": "クロウ",
-    "rarity": "レジェンド",
-    "role": "アサシン"
-  },
-  {
-    "name": "レオン",
-    "rarity": "レジェンド",
-    "role": "アサシン"
-  },
-  {
-    "name": "サンディ",
-    "rarity": "レジェンド",
-    "role": "コントローラー"
-  },
-  {
-    "name": "アンバー",
-    "rarity": "レジェンド",
-    "role": "コントローラー"
-  },
-  {
-    "name": "メグ",
-    "rarity": "レジェンド",
-    "role": "タンク"
-  },
-  {
-    "name": "サージ",
-    "rarity": "レジェンド",
-    "role": "アタッカー"
-  },
-  {
-    "name": "チェスター",
-    "rarity": "レジェンド",
-    "role": "アタッカー"
-  },
-  {
-    "name": "コーデリアス",
-    "rarity": "レジェンド",
-    "role": "アサシン"
-  },
-  {
-    "name": "キット",
-    "rarity": "レジェンド",
-    "role": "サポート"
-  },
-  {
-    "name": "ドラコ",
-    "rarity": "レジェンド",
-    "role": "タンク"
-  },
-  {
-    "name": "ケンジ",
-    "rarity": "レジェンド",
-    "role": "アサシン"
-  },
-  {
-    "name": "ミコ",
-    "rarity": "ウルトラレア",
-    "role": "アサシン"
-  },
-  {
-    "name": "メイジー",
-    "rarity": "ハイパーレア",
-    "role": "スナイパー"
-  },
-  {
-    "name": "アリー",
-    "rarity": "ウルトラレア",
-    "role": "アサシン"
-  },
-  {
-    "name": "ミナ",
-    "rarity": "ウルトラレア",
-    "role": "アタッカー"
-  },
-  {
-    "name": "トランプ",
-    "rarity": "ハイパーレア",
-    "role": "タンク"
-  },
-  {
-    "name": "ジェヨン",
-    "rarity": "ウルトラレア",
-    "role": "サポート"
-  }
-]
+{
+  "updatedAt": "2026-10-28",
+  "sources": {
+    "brawlers": "https://api.brawlapi.com/v1/brawlers",
+    "gameData": "https://github.com/satishkhanal76/BrawlStats/tree/main/public/assets/csv/csv_logic"
+  },
+  "characters": [
+    {"id":16000000,"name":"シェリー","nameEn":"Shelly","image":"https://cdn.brawlify.com/brawlers/borderless/16000000.png"},
+    {"id":16000001,"name":"コルト","nameEn":"Colt","image":"https://cdn.brawlify.com/brawlers/borderless/16000001.png"},
+    {"id":16000002,"name":"ブル","nameEn":"Bull","image":"https://cdn.brawlify.com/brawlers/borderless/16000002.png"},
+    {"id":16000003,"name":"ブロック","nameEn":"Brock","image":"https://cdn.brawlify.com/brawlers/borderless/16000003.png"},
+    {"id":16000004,"name":"リコ","nameEn":"Rico","image":"https://cdn.brawlify.com/brawlers/borderless/16000004.png"},
+    {"id":16000005,"name":"スパイク","nameEn":"Spike","image":"https://cdn.brawlify.com/brawlers/borderless/16000005.png"},
+    {"id":16000006,"name":"バーリー","nameEn":"Barley","image":"https://cdn.brawlify.com/brawlers/borderless/16000006.png"},
+    {"id":16000007,"name":"ジェシー","nameEn":"Jessie","image":"https://cdn.brawlify.com/brawlers/borderless/16000007.png"},
+    {"id":16000008,"name":"ニタ","nameEn":"Nita","image":"https://cdn.brawlify.com/brawlers/borderless/16000008.png"},
+    {"id":16000009,"name":"ダイナマイク","nameEn":"Dynamike","image":"https://cdn.brawlify.com/brawlers/borderless/16000009.png"},
+    {"id":16000010,"name":"エルプリモ","nameEn":"El Primo","image":"https://cdn.brawlify.com/brawlers/borderless/16000010.png"},
+    {"id":16000011,"name":"モーティス","nameEn":"Mortis","image":"https://cdn.brawlify.com/brawlers/borderless/16000011.png"},
+    {"id":16000012,"name":"クロウ","nameEn":"Crow","image":"https://cdn.brawlify.com/brawlers/borderless/16000012.png"},
+    {"id":16000013,"name":"ポコ","nameEn":"Poco","image":"https://cdn.brawlify.com/brawlers/borderless/16000013.png"},
+    {"id":16000014,"name":"ボウ","nameEn":"Bo","image":"https://cdn.brawlify.com/brawlers/borderless/16000014.png"},
+    {"id":16000015,"name":"エリザベス","nameEn":"Piper","image":"https://cdn.brawlify.com/brawlers/borderless/16000015.png"},
+    {"id":16000016,"name":"パム","nameEn":"Pam","image":"https://cdn.brawlify.com/brawlers/borderless/16000016.png"},
+    {"id":16000017,"name":"タラ","nameEn":"Tara","image":"https://cdn.brawlify.com/brawlers/borderless/16000017.png"},
+    {"id":16000018,"name":"ダリル","nameEn":"Darryl","image":"https://cdn.brawlify.com/brawlers/borderless/16000018.png"},
+    {"id":16000019,"name":"ペニー","nameEn":"Penny","image":"https://cdn.brawlify.com/brawlers/borderless/16000019.png"},
+    {"id":16000020,"name":"フランケン","nameEn":"Frank","image":"https://cdn.brawlify.com/brawlers/borderless/16000020.png"},
+    {"id":16000021,"name":"ジーン","nameEn":"Gene","image":"https://cdn.brawlify.com/brawlers/borderless/16000021.png"},
+    {"id":16000022,"name":"ティック","nameEn":"Tick","image":"https://cdn.brawlify.com/brawlers/borderless/16000022.png"},
+    {"id":16000023,"name":"レオン","nameEn":"Leon","image":"https://cdn.brawlify.com/brawlers/borderless/16000023.png"},
+    {"id":16000024,"name":"ローサ","nameEn":"Rosa","image":"https://cdn.brawlify.com/brawlers/borderless/16000024.png"},
+    {"id":16000025,"name":"カール","nameEn":"Carl","image":"https://cdn.brawlify.com/brawlers/borderless/16000025.png"},
+    {"id":16000026,"name":"ビビ","nameEn":"Bibi","image":"https://cdn.brawlify.com/brawlers/borderless/16000026.png"},
+    {"id":16000027,"name":"8ビット","nameEn":"8-Bit","image":"https://cdn.brawlify.com/brawlers/borderless/16000027.png"},
+    {"id":16000028,"name":"サンディ","nameEn":"Sandy","image":"https://cdn.brawlify.com/brawlers/borderless/16000028.png"},
+    {"id":16000029,"name":"ビー","nameEn":"Bea","image":"https://cdn.brawlify.com/brawlers/borderless/16000029.png"},
+    {"id":16000030,"name":"Emz","nameEn":"Emz","image":"https://cdn.brawlify.com/brawlers/borderless/16000030.png"},
+    {"id":16000031,"name":"ミスターP","nameEn":"Mr. P","image":"https://cdn.brawlify.com/brawlers/borderless/16000031.png"},
+    {"id":16000032,"name":"MAX","nameEn":"Max","image":"https://cdn.brawlify.com/brawlers/borderless/16000032.png"},
+    {"id":16000034,"name":"ジャッキー","nameEn":"Jacky","image":"https://cdn.brawlify.com/brawlers/borderless/16000034.png"},
+    {"id":16000035,"name":"ゲイル","nameEn":"Gale","image":"https://cdn.brawlify.com/brawlers/borderless/16000035.png"},
+    {"id":16000036,"name":"ナーニ","nameEn":"Nani","image":"https://cdn.brawlify.com/brawlers/borderless/16000036.png"},
+    {"id":16000037,"name":"スプラウト","nameEn":"Sprout","image":"https://cdn.brawlify.com/brawlers/borderless/16000037.png"},
+    {"id":16000038,"name":"サージ","nameEn":"Surge","image":"https://cdn.brawlify.com/brawlers/borderless/16000038.png"},
+    {"id":16000039,"name":"コレット","nameEn":"Colette","image":"https://cdn.brawlify.com/brawlers/borderless/16000039.png"},
+    {"id":16000040,"name":"アンバー","nameEn":"Amber","image":"https://cdn.brawlify.com/brawlers/borderless/16000040.png"},
+    {"id":16000041,"name":"ルー","nameEn":"Lou","image":"https://cdn.brawlify.com/brawlers/borderless/16000041.png"},
+    {"id":16000042,"name":"バイロン","nameEn":"Byron","image":"https://cdn.brawlify.com/brawlers/borderless/16000042.png"},
+    {"id":16000043,"name":"エドガー","nameEn":"Edgar","image":"https://cdn.brawlify.com/brawlers/borderless/16000043.png"},
+    {"id":16000044,"name":"ラフス","nameEn":"Ruffs","image":"https://cdn.brawlify.com/brawlers/borderless/16000044.png"},
+    {"id":16000045,"name":"ストゥー","nameEn":"Stu","image":"https://cdn.brawlify.com/brawlers/borderless/16000045.png"},
+    {"id":16000046,"name":"ベル","nameEn":"Belle","image":"https://cdn.brawlify.com/brawlers/borderless/16000046.png"},
+    {"id":16000047,"name":"スクウィーク","nameEn":"Squeak","image":"https://cdn.brawlify.com/brawlers/borderless/16000047.png"},
+    {"id":16000048,"name":"グロム","nameEn":"Grom","image":"https://cdn.brawlify.com/brawlers/borderless/16000048.png"},
+    {"id":16000049,"name":"バズ","nameEn":"Buzz","image":"https://cdn.brawlify.com/brawlers/borderless/16000049.png"},
+    {"id":16000050,"name":"グリフ","nameEn":"Griff","image":"https://cdn.brawlify.com/brawlers/borderless/16000050.png"},
+    {"id":16000051,"name":"アッシュ","nameEn":"Ash","image":"https://cdn.brawlify.com/brawlers/borderless/16000051.png"},
+    {"id":16000052,"name":"メグ","nameEn":"Meg","image":"https://cdn.brawlify.com/brawlers/borderless/16000052.png"},
+    {"id":16000053,"name":"ローラ","nameEn":"Lola","image":"https://cdn.brawlify.com/brawlers/borderless/16000053.png"},
+    {"id":16000054,"name":"ファング","nameEn":"Fang","image":"https://cdn.brawlify.com/brawlers/borderless/16000054.png"},
+    {"id":16000056,"name":"イヴ","nameEn":"Eve","image":"https://cdn.brawlify.com/brawlers/borderless/16000056.png"},
+    {"id":16000057,"name":"ジャネット","nameEn":"Janet","image":"https://cdn.brawlify.com/brawlers/borderless/16000057.png"},
+    {"id":16000058,"name":"ボニー","nameEn":"Bonnie","image":"https://cdn.brawlify.com/brawlers/borderless/16000058.png"},
+    {"id":16000059,"name":"オーティス","nameEn":"Otis","image":"https://cdn.brawlify.com/brawlers/borderless/16000059.png"},
+    {"id":16000060,"name":"サム","nameEn":"Sam","image":"https://cdn.brawlify.com/brawlers/borderless/16000060.png"},
+    {"id":16000061,"name":"ガス","nameEn":"Gus","image":"https://cdn.brawlify.com/brawlers/borderless/16000061.png"},
+    {"id":16000062,"name":"バスター","nameEn":"Buster","image":"https://cdn.brawlify.com/brawlers/borderless/16000062.png"},
+    {"id":16000063,"name":"チェスター","nameEn":"Chester","image":"https://cdn.brawlify.com/brawlers/borderless/16000063.png"},
+    {"id":16000064,"name":"グレイ","nameEn":"Gray","image":"https://cdn.brawlify.com/brawlers/borderless/16000064.png"},
+    {"id":16000065,"name":"マンディ","nameEn":"Mandy","image":"https://cdn.brawlify.com/brawlers/borderless/16000065.png"},
+    {"id":16000066,"name":"R-T","nameEn":"R-T","image":"https://cdn.brawlify.com/brawlers/borderless/16000066.png"},
+    {"id":16000067,"name":"ウィロー","nameEn":"Willow","image":"https://cdn.brawlify.com/brawlers/borderless/16000067.png"},
+    {"id":16000068,"name":"メイジー","nameEn":"Maisie","image":"https://cdn.brawlify.com/brawlers/borderless/16000068.png"},
+    {"id":16000069,"name":"ハンク","nameEn":"Hank","image":"https://cdn.brawlify.com/brawlers/borderless/16000069.png"},
+    {"id":16000070,"name":"コーデリアス","nameEn":"Cordelius","image":"https://cdn.brawlify.com/brawlers/borderless/16000070.png"},
+    {"id":16000071,"name":"ダグ","nameEn":"Doug","image":"https://cdn.brawlify.com/brawlers/borderless/16000071.png"},
+    {"id":16000072,"name":"パール","nameEn":"Pearl","image":"https://cdn.brawlify.com/brawlers/borderless/16000072.png"},
+    {"id":16000073,"name":"チャック","nameEn":"Chuck","image":"https://cdn.brawlify.com/brawlers/borderless/16000073.png"},
+    {"id":16000074,"name":"チャーリー","nameEn":"Charlie","image":"https://cdn.brawlify.com/brawlers/borderless/16000074.png"},
+    {"id":16000075,"name":"ミコ","nameEn":"Mico","image":"https://cdn.brawlify.com/brawlers/borderless/16000075.png"},
+    {"id":16000076,"name":"キット","nameEn":"Kit","image":"https://cdn.brawlify.com/brawlers/borderless/16000076.png"},
+    {"id":16000077,"name":"ラリー&ローリー","nameEn":"Larry & Lawrie","image":"https://cdn.brawlify.com/brawlers/borderless/16000077.png"},
+    {"id":16000078,"name":"メロディー","nameEn":"Melodie","image":"https://cdn.brawlify.com/brawlers/borderless/16000078.png"},
+    {"id":16000079,"name":"アンジェロ","nameEn":"Angelo","image":"https://cdn.brawlify.com/brawlers/borderless/16000079.png"},
+    {"id":16000080,"name":"ドラコ","nameEn":"Draco","image":"https://cdn.brawlify.com/brawlers/borderless/16000080.png"},
+    {"id":16000081,"name":"リリー","nameEn":"Lily","image":"https://cdn.brawlify.com/brawlers/borderless/16000081.png"},
+    {"id":16000082,"name":"ベリー","nameEn":"Berry","image":"https://cdn.brawlify.com/brawlers/borderless/16000082.png"},
+    {"id":16000083,"name":"クランシー","nameEn":"Clancy","image":"https://cdn.brawlify.com/brawlers/borderless/16000083.png"},
+    {"id":16000084,"name":"モー","nameEn":"Moe","image":"https://cdn.brawlify.com/brawlers/borderless/16000084.png"},
+    {"id":16000085,"name":"ケンジ","nameEn":"Kenji","image":"https://cdn.brawlify.com/brawlers/borderless/16000085.png"},
+    {"id":16000086,"name":"シェイド","nameEn":"Shade","image":"https://cdn.brawlify.com/brawlers/borderless/16000086.png"},
+    {"id":16000087,"name":"ジュジュ","nameEn":"Juju","image":"https://cdn.brawlify.com/brawlers/borderless/16000087.png"},
+    {"id":16000089,"name":"ミープル","nameEn":"Meeple","image":"https://cdn.brawlify.com/brawlers/borderless/16000089.png"},
+    {"id":16000090,"name":"オーリー","nameEn":"Ollie","image":"https://cdn.brawlify.com/brawlers/borderless/16000090.png"},
+    {"id":16000091,"name":"ルミ","nameEn":"Lumi","image":"https://cdn.brawlify.com/brawlers/borderless/16000091.png"},
+    {"id":16000092,"name":"フィンクス","nameEn":"Finx","image":"https://cdn.brawlify.com/brawlers/borderless/16000092.png"},
+    {"id":16000093,"name":"ジェヨン","nameEn":"Jae-Yong","image":"https://cdn.brawlify.com/brawlers/borderless/16000093.png"},
+    {"id":16000094,"name":"カゼ","nameEn":"Kaze","image":"https://cdn.brawlify.com/brawlers/borderless/16000094.png"},
+    {"id":16000095,"name":"アリー","nameEn":"Alli","image":"https://cdn.brawlify.com/brawlers/borderless/16000095.png"},
+    {"id":16000096,"name":"トランク","nameEn":"Trunk","image":"https://cdn.brawlify.com/brawlers/borderless/16000096.png"},
+    {"id":16000097,"name":"ミナ","nameEn":"Mina","image":"https://cdn.brawlify.com/brawlers/borderless/16000097.png"},
+    {"id":16000098,"name":"ジギー","nameEn":"Ziggy","image":"https://cdn.brawlify.com/brawlers/borderless/16000098.png"},
+    {"id":16000099,"name":"ピアース","nameEn":"Pierce","image":"https://cdn.brawlify.com/brawlers/borderless/16000099.png"},
+    {"id":16000100,"name":"ジジ","nameEn":"Gigi","image":"https://cdn.brawlify.com/brawlers/borderless/16000100.png"},
+    {"id":16000101,"name":"Glowy","nameEn":"Glowy","image":"https://cdn.brawlify.com/brawlers/borderless/16000101.png"},
+    {"id":16000102,"name":"シリウス","nameEn":"Sirius","image":"https://cdn.brawlify.com/brawlers/borderless/16000102.png"},
+    {"id":16000103,"name":"ナジア","nameEn":"Najia","image":"https://cdn.brawlify.com/brawlers/borderless/16000103.png"},
+    {"id":16000104,"name":"ダミアン","nameEn":"Damian","image":"https://cdn.brawlify.com/brawlers/borderless/16000104.png"},
+    {"id":16000105,"name":"スターノヴァ","nameEn":"Starr Nova","image":"https://cdn.brawlify.com/brawlers/borderless/16000105.png"},
+    {"id":16000106,"name":"ボルト","nameEn":"Bolt","image":"https://cdn.brawlify.com/brawlers/borderless/16000106.png"},
+    {"id":16000107,"name":"ノリ","nameEn":"Nori","image":"https://cdn.brawlify.com/brawlers/borderless/16000107.png"},
+    {"id":16000108,"name":"ウェンディ","nameEn":"Wendy","image":"https://cdn.brawlify.com/brawlers/borderless/16000108.png"},
+    {"id":16000109,"name":"コスモ","nameEn":"Cosmo","image":"https://cdn.brawlify.com/brawlers/borderless/16000109.png"},
+    {"id":16000110,"name":"ヴィンス","nameEn":"Vince","image":"https://cdn.brawlify.com/brawlers/borderless/16000110.png"}
+  ]
+}
