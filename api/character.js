@@ -1,8 +1,9 @@
 import { extractToken, verifyToken } from '../lib/auth.js';
 import { loadCharacters, selectCharacters } from '../lib/characters.js';
+import { enrichCharacters, validateLevel } from '../lib/brawl-data.js';
 
 async function translateText(text, target) {
-  if (!target || target === 'ja') return text;
+  if (!text || !target || target === 'ja') return text;
 
   const url = new URL('https://api.mymemory.translated.net/get');
   url.searchParams.set('q', text);
@@ -11,13 +12,17 @@ async function translateText(text, target) {
   try {
     const response = await fetch(url);
     if (!response.ok) return text;
-
     const data = await response.json();
     return data?.responseData?.translatedText || text;
   } catch (error) {
     console.error('Translation API error:', error);
     return text;
   }
+}
+
+function queryValue(value, fallback) {
+  if (Array.isArray(value)) return value[0] ?? fallback;
+  return value ?? fallback;
 }
 
 export default async function handler(req, res) {
@@ -41,20 +46,23 @@ export default async function handler(req, res) {
   }
 
   try {
-    const lang = Array.isArray(req.query.lang) ? req.query.lang[0] : req.query.lang || 'ja';
-    const rarity = Array.isArray(req.query.rarity) ? req.query.rarity[0] : req.query.rarity;
-    const role = Array.isArray(req.query.role) ? req.query.role[0] : req.query.role;
-    const count = Array.isArray(req.query.count) ? req.query.count[0] : req.query.count || '1';
+    const lang = queryValue(req.query.lang, 'ja');
+    const rarity = queryValue(req.query.rarity, undefined);
+    const role = queryValue(req.query.role, undefined);
+    const count = queryValue(req.query.count, '1');
+    const level = validateLevel(queryValue(req.query.level, '11'));
+
+    if (level === null) {
+      return res.status(400).json({ error: 'level must be an integer from 1 to 11' });
+    }
+
     const rawBlockedIds = Array.isArray(req.query.blockedIds)
       ? req.query.blockedIds.join(',')
       : req.query.blockedIds || '';
+    const blockedIds = rawBlockedIds.split(',').map((id) => id.trim()).filter(Boolean);
 
-    const blockedIds = rawBlockedIds
-      .split(',')
-      .map((id) => id.trim())
-      .filter(Boolean);
-
-    const selected = selectCharacters(loadCharacters(), {
+    const enriched = await enrichCharacters(loadCharacters(), level);
+    const selected = selectCharacters(enriched, {
       rarity,
       role,
       blockedIds,
@@ -67,15 +75,20 @@ export default async function handler(req, res) {
       });
     }
 
-    const results = await Promise.all(
-      selected.map(async (character) => ({
-        id: character.id,
-        name: character.name,
-        rarity: await translateText(character.rarity, lang),
-        role: await translateText(character.role, lang),
-      }))
-    );
+    const results = await Promise.all(selected.map(async (character) => ({
+      id: character.id,
+      name: lang === 'en' ? character.nameEn : character.name,
+      nameEn: character.nameEn,
+      image: character.image,
+      rarity: await translateText(character.rarity, lang),
+      role: await translateText(character.role, lang),
+      description: character.description,
+      stats: character.stats,
+      gadgets: character.gadgets,
+      starPowers: character.starPowers,
+    })));
 
+    res.setHeader('Cache-Control', 'private, max-age=0, must-revalidate');
     return res.status(200).json(results.length === 1 ? results[0] : results);
   } catch (error) {
     console.error('Character API error:', error);
