@@ -2,22 +2,39 @@ import { extractToken, verifyToken } from '../lib/auth.js';
 import { loadCharacters, selectCharacters } from '../lib/characters.js';
 import { enrichCharacters, validateLevel } from '../lib/brawl-data.js';
 
-async function translateText(text, target) {
-  if (!text || !target || target === 'ja') return text;
+const translationCache = new Map();
+
+async function translateText(text, source, target) {
+  if (!text || !target || source === target) return text;
+
+  const cacheKey = `${source}:${target}:${text}`;
+  if (translationCache.has(cacheKey)) return translationCache.get(cacheKey);
 
   const url = new URL('https://api.mymemory.translated.net/get');
   url.searchParams.set('q', text);
-  url.searchParams.set('langpair', `ja|${target}`);
+  url.searchParams.set('langpair', `${source}|${target}`);
 
   try {
     const response = await fetch(url);
     if (!response.ok) return text;
     const data = await response.json();
-    return data?.responseData?.translatedText || text;
+    const translated = data?.responseData?.translatedText || text;
+    translationCache.set(cacheKey, translated);
+    return translated;
   } catch (error) {
     console.error('Translation API error:', error);
     return text;
   }
+}
+
+async function localizeAbility(ability, lang) {
+  if (lang === 'en') return ability;
+  return {
+    ...ability,
+    nameEn: ability.name,
+    name: await translateText(ability.name, 'en', lang),
+    description: await translateText(ability.description, 'en', lang),
+  };
 }
 
 function queryValue(value, fallback) {
@@ -80,12 +97,14 @@ export default async function handler(req, res) {
       name: lang === 'en' ? character.nameEn : character.name,
       nameEn: character.nameEn,
       image: character.image,
-      rarity: await translateText(character.rarity, lang),
-      role: await translateText(character.role, lang),
-      description: character.description,
+      rarity: lang === 'ja' ? character.rarity : await translateText(character.rarity, 'ja', lang),
+      role: lang === 'ja' ? character.role : await translateText(character.role, 'ja', lang),
+      description: lang === 'en'
+        ? character.description
+        : await translateText(character.description, 'en', lang),
       stats: character.stats,
-      gadgets: character.gadgets,
-      starPowers: character.starPowers,
+      gadgets: await Promise.all(character.gadgets.map((ability) => localizeAbility(ability, lang))),
+      starPowers: await Promise.all(character.starPowers.map((ability) => localizeAbility(ability, lang))),
     })));
 
     res.setHeader('Cache-Control', 'private, max-age=0, must-revalidate');
