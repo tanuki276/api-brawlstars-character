@@ -1,23 +1,11 @@
 {
   "name": "BrawlChara",
-  "version": "1.5.3",
-  "description": "Brawl Stars character API server",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
-  },
-  "dependencies": {
-    "jsonwebtoken": "^9.0.0",
-    "node-fetch": "^3.3.1",
-    "bcrypt": "^5.1.0",
-    "express": "^4.18.2",
-    "dotenv": "^16.0.3"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.22"
-  },
+  "version": "1.5.4",
+  "description": "Brawl Stars character API for Vercel Functions",
   "type": "module",
+  "dependencies": {
+    "jsonwebtoken": "^9.0.0"
+  },
   "author": "",
   "license": "MIT"
 }
