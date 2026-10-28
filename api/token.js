@@ -1,31 +1,15 @@
-import jwt from 'jsonwebtoken';
-
-const SECRET_KEY = process.env.SECRET_KEY || 'your-secret-key';
+import { createToken } from '../lib/auth.js';
 
 export default function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { expiresIn } = req.body;
-
-  let signOptions = {};
-
-  if (expiresIn === 0 || expiresIn === 'never') {
-    signOptions = {};
-  } else if (typeof expiresIn === 'number') {
-    signOptions = { expiresIn: `${expiresIn}s` };
-  } else if (typeof expiresIn === 'string') {
-    signOptions = { expiresIn };
-  } else {
-    signOptions = { expiresIn: '1h' };
+  try {
+    const { token, expiresIn } = createToken(req.body?.expiresIn);
+    return res.status(200).json({ token, expiresIn });
+  } catch (error) {
+    console.error('Token API error:', error);
+    return res.status(500).json({ error: 'Server authentication is not configured' });
   }
-
-  const token = jwt.sign(
-    { created: Date.now() },
-    SECRET_KEY,
-    signOptions
-  );
-
-  res.status(200).json({ token, expiresIn: signOptions.expiresIn || 'never' });
 }
