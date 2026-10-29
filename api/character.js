@@ -1,6 +1,7 @@
 import { extractToken, verifyToken } from '../lib/auth.js';
 import { loadCharacters, selectCharacters, validateCount } from '../lib/characters.js';
 import { enrichCharacters, validateLevel } from '../lib/brawl-data.js';
+import { searchCharacters } from '../lib/catalog.js';
 
 const translationCache = new Map();
 const MAX_TRANSLATIONS = 500;
@@ -76,6 +77,15 @@ export default async function handler(req, res) {
 
   try {
     const query = req.query || {};
+    const id = queryValue(query.id, undefined);
+    const ids = queryValue(query.ids, undefined);
+    const q = queryValue(query.q, '');
+    if ((id !== undefined && (typeof id !== 'string' || !/^\d+$/.test(id))) || typeof q !== 'string' || q.length > 100) {
+      return res.status(400).json({ error: 'id must be numeric and q must be at most 100 characters' });
+    }
+    if (ids !== undefined && (typeof ids !== 'string' || !/^\d+(?:,\d+)*$/.test(ids) || ids.split(',').length > 200)) {
+      return res.status(400).json({ error: 'ids must contain up to 200 comma-separated numeric IDs' });
+    }
     const rawLang = queryValue(query.lang, 'ja');
     if (typeof rawLang !== 'string' || !/^[a-z]{2,3}(?:-[a-z0-9]{2,8}){0,2}$/i.test(rawLang)) {
       return res.status(400).json({ error: 'lang must be a language code such as ja or en' });
@@ -102,7 +112,13 @@ export default async function handler(req, res) {
     }
     const blockedIds = rawBlockedIds.split(',').map((id) => id.trim()).filter(Boolean);
 
-    const enriched = await enrichCharacters(loadCharacters(), level);
+    let catalog = searchCharacters(loadCharacters(), q);
+    if (id !== undefined) catalog = catalog.filter((item) => String(item.id) === id);
+    if (ids !== undefined) {
+      const allowedIds = new Set(ids.split(','));
+      catalog = catalog.filter((item) => allowedIds.has(String(item.id)));
+    }
+    const enriched = await enrichCharacters(catalog, level);
     const selected = selectCharacters(enriched, {
       rarity,
       role,

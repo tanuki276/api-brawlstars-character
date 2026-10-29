@@ -59,9 +59,34 @@
   <div class="character-controls">
     <label for="powerLevel">パワーレベル:</label>
     <select id="powerLevel"></select>
+    <label for="drawCount">取得数:</label>
+    <select id="drawCount"><option value="1">1体</option><option value="3">3体</option><option value="5">5体</option></select>
     <button id="getCharacter"><i class="fa-solid fa-dice-d20"></i> 試す</button>
   </div>
   <div id="characterResult" aria-live="polite"></div>
+
+  <section class="catalog-panel" aria-labelledby="catalogTitle">
+    <h2 id="catalogTitle">キャラ図鑑</h2>
+    <p class="muted">日本語・英語・IDで検索。ひらがなでも探せます。絞り込みはランダム取得にも使えます。</p>
+    <div class="catalog-toolbar">
+      <label for="catalogSearch">キャラ名・ID<input id="catalogSearch" type="search" maxlength="100" placeholder="例: シェリー / shelly / 16000000" /></label>
+      <label for="catalogRarity">レア度<select id="catalogRarity"><option value="">すべて</option></select></label>
+      <label for="catalogRole">タイプ<select id="catalogRole"><option value="">すべて</option></select></label>
+      <label for="catalogSort">並び順<select id="catalogSort"><option value="id">ID順</option><option value="-id">ID逆順</option><option value="name">名前順</option><option value="-health">HPが高い順</option><option value="-attackDamage">1ヒットの攻撃力が高い順</option></select></label>
+    </div>
+    <div class="catalog-actions">
+      <button id="catalogLoad" type="button">図鑑を開く・更新</button>
+      <label class="check-label"><input id="favoritesOnly" type="checkbox" /> お気に入りのみ <span id="favoriteCount">0</span>体</label>
+      <button id="catalogReset" type="button">条件をクリア</button>
+    </div>
+    <p id="catalogStatus" role="status" aria-live="polite">トークンを生成または選択して、図鑑を開いてください。</p>
+    <div id="catalogGrid" class="catalog-grid" aria-busy="false"></div>
+    <nav class="catalog-pagination" aria-label="図鑑のページ">
+      <button id="catalogPrev" type="button" disabled>前へ</button>
+      <span id="catalogPage">0 / 0</span>
+      <button id="catalogNext" type="button" disabled>次へ</button>
+    </nav>
+  </section>
 
   <h2><i class="fa-solid fa-book"></i> ドキュメント</h2>
   <p><a href="https://document-api-brawl-chara.vercel.app/" target="_blank" rel="noopener noreferrer">マニュアルを見る</a></p>
@@ -192,8 +217,8 @@
       section.appendChild(grid); return section;
     }
 
-    function renderCharacter(data) {
-      characterResult.replaceChildren();
+    function renderCharacter(data, append = false) {
+      if (!append) characterResult.replaceChildren();
       const card = document.createElement('article'); card.className = 'character-card';
       const head = document.createElement('div'); head.className = 'character-head';
       const img = document.createElement('img'); img.className = 'character-icon'; img.src = data.image || ''; img.alt = `${data.name}のアイコン`;
@@ -226,12 +251,22 @@
       if (!token) { alert('トークンを選択または生成してください'); return; }
       setLoading(getCharBtn, true); characterResult.replaceChildren();
       try {
-        const response = await fetch(`/api/character?level=${encodeURIComponent(powerLevel.value)}`, {
+        const params = new URLSearchParams({ level: powerLevel.value, count: document.getElementById('drawCount').value || '1' });
+        if (document.getElementById('favoritesOnly').checked) {
+          const ids = globalThis.getCatalogFavoriteIds?.() || [];
+          if (!ids.length) throw new Error('先に図鑑でお気に入りを登録してください。');
+          params.set('ids', ids.join(','));
+        }
+        for (const [key, element] of [['q', 'catalogSearch'], ['rarity', 'catalogRarity'], ['role', 'catalogRole']]) {
+          const value = document.getElementById(element).value.trim();
+          if (value) params.set(key, value);
+        }
+        const response = await fetch(`/api/character?${params}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
-        renderCharacter(data);
+        (Array.isArray(data) ? data : [data]).forEach((item, index) => renderCharacter(item, index > 0));
       } catch (error) {
         const message = document.createElement('p'); message.className = 'error'; message.textContent = `通信エラー: ${error.message}`; characterResult.appendChild(message);
       } finally { setLoading(getCharBtn, false); }
@@ -270,5 +305,6 @@
     getCharBtn.addEventListener('click', getCharacter);
     copyBtn.addEventListener('click', copyTokenToClipboard);
   </script>
+  <script src="/catalog.js" defer></script>
 </body>
 </html>
