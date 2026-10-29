@@ -4,7 +4,11 @@
   "description": "Brawl Stars character API for Vercel Functions",
   "type": "module",
   "scripts": {
+    "test": "node --test",
     "sync:data": "node scripts/sync-character-data.mjs"
+  },
+  "engines": {
+    "node": ">=22"
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.0"

@@ -50,6 +50,7 @@
   <button id="copyToken" disabled><i class="fa-regular fa-copy"></i> トークンをコピー</button>
   <p>生成されたトークン:</p>
   <textarea id="tokenOutput" rows="4" cols="60" readonly></textarea>
+  <p id="tokenStatus" role="status" aria-live="polite"></p>
 
   <h2>生成済みトークン一覧</h2>
   <ul id="tokenList"><li>トークンがありません</li></ul>
@@ -79,6 +80,7 @@
     const getCharBtn = document.getElementById('getCharacter');
     const copyBtn = document.getElementById('copyToken');
     const tokenOutput = document.getElementById('tokenOutput');
+    const tokenStatus = document.getElementById('tokenStatus');
     const characterResult = document.getElementById('characterResult');
     const tokenList = document.getElementById('tokenList');
     const powerLevel = document.getElementById('powerLevel');
@@ -103,13 +105,18 @@
       try {
         const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
         const now = Date.now();
-        const tokens = stored.filter((item) => item.expiresAt === 0 || item.expiresAt > now);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens));
+        const tokens = (Array.isArray(stored) ? stored : []).filter((item) =>
+          item && typeof item.token === 'string' && item.token.trim() &&
+          Number.isFinite(item.expiresAt) && (item.expiresAt === 0 || item.expiresAt > now)
+        );
         return tokens;
       } catch { return []; }
     }
 
-    function saveTokens(tokens) { localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens)); }
+    function saveTokens(tokens) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens)); }
+      catch { tokenStatus.textContent = 'ブラウザーに保存できませんでした。必要なトークンをコピーして保管してください。'; }
+    }
     function shortenToken(token) { return token.length <= 20 ? token : `${token.slice(0, 10)}...${token.slice(-6)}`; }
 
     function renderTokenList() {
@@ -118,20 +125,30 @@
       if (!tokens.length) {
         const li = document.createElement('li'); li.textContent = 'トークンがありません'; tokenList.appendChild(li); return;
       }
-      tokens.forEach(({ token, expiresAt }, index) => {
+      tokens.forEach(({ token, expiresAt }) => {
         const li = document.createElement('li');
         const use = document.createElement('button'); use.textContent = '▶'; use.title = 'このトークンを使う';
         const code = document.createElement('code'); code.textContent = shortenToken(token);
         const small = document.createElement('small'); small.textContent = ` 有効期限: ${expiresAt === 0 ? '無制限' : new Date(expiresAt).toLocaleString()}`;
         const remove = document.createElement('button'); remove.textContent = '✕'; remove.title = '削除'; remove.style.color = 'red';
-        use.onclick = () => { tokenOutput.value = loadTokens()[index]?.token || ''; copyBtn.disabled = !tokenOutput.value; };
-        remove.onclick = () => { const next = loadTokens(); next.splice(index, 1); saveTokens(next); renderTokenList(); };
+        use.onclick = () => {
+          tokenOutput.value = loadTokens().find((item) => item.token === token)?.token || '';
+          copyBtn.disabled = !tokenOutput.value;
+          tokenStatus.textContent = tokenOutput.value ? 'トークンを選択しました。' : 'このトークンは期限切れです。';
+          renderTokenList();
+        };
+        remove.onclick = () => {
+          saveTokens(loadTokens().filter((item) => item.token !== token));
+          if (tokenOutput.value === token) { tokenOutput.value = ''; copyBtn.disabled = true; }
+          renderTokenList();
+        };
         li.append(use, code, small, remove); tokenList.appendChild(li);
       });
     }
 
     async function generateToken() {
       setLoading(generateBtn, true);
+      tokenStatus.textContent = '';
       try {
         const seconds = Number(document.getElementById('expires').value);
         const response = await fetch('/api/token', {
@@ -140,13 +157,14 @@
         });
         const data = await response.json();
         if (!response.ok || !data.token) throw new Error(data.error || `HTTP ${response.status}`);
+        const expiresAt = data.expiresAt;
+        if (!Number.isFinite(expiresAt) || expiresAt < 0) throw new Error('有効期限を取得できませんでした。');
         tokenOutput.value = data.token; copyBtn.disabled = false;
-        const expiresAt = data.expiresIn === 'never' ? 0 : Date.now() + Number.parseInt(data.expiresIn, 10) * 1000;
         const tokens = loadTokens();
         if (!tokens.some((item) => item.token === data.token)) tokens.push({ token: data.token, expiresAt });
         saveTokens(tokens); renderTokenList();
-      } catch (error) { tokenOutput.value = `エラー: ${error.message}`; }
-      finally { setLoading(generateBtn, false); }
+      } catch (error) { tokenStatus.textContent = `エラー: ${error.message}`; }
+      finally { copyBtn.disabled = !tokenOutput.value; setLoading(generateBtn, false); }
     }
 
     function stat(label, value, suffix = '') {
@@ -220,7 +238,14 @@
     }
 
     async function copyTokenToClipboard() {
-      if (tokenOutput.value) await navigator.clipboard.writeText(tokenOutput.value);
+      if (!tokenOutput.value) return;
+      try {
+        await navigator.clipboard.writeText(tokenOutput.value);
+        tokenStatus.textContent = 'トークンをコピーしました。';
+      } catch {
+        tokenOutput.focus(); tokenOutput.select();
+        tokenStatus.textContent = 'コピーできませんでした。選択されたトークンを手動でコピーしてください。';
+      }
     }
 
     function showCookieConsentUi(show) { document.getElementById('cookieConsent').style.display = show ? 'block' : 'none'; }
@@ -230,9 +255,17 @@
       } catch (error) { console.error(error); }
     }
 
-    document.getElementById('acceptCookie').onclick = () => { localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted'); sendCookieConsentToDiscord(); showCookieConsentUi(false); };
-    document.getElementById('declineCookie').onclick = () => { localStorage.setItem(COOKIE_CONSENT_KEY, 'declined'); showCookieConsentUi(false); };
-    document.addEventListener('DOMContentLoaded', () => { showCookieConsentUi(!localStorage.getItem(COOKIE_CONSENT_KEY)); renderTokenList(); });
+    function saveConsent(value) {
+      try { localStorage.setItem(COOKIE_CONSENT_KEY, value); } catch { /* Storage may be disabled. */ }
+      showCookieConsentUi(false);
+    }
+    document.getElementById('acceptCookie').onclick = () => { saveConsent('accepted'); sendCookieConsentToDiscord(); };
+    document.getElementById('declineCookie').onclick = () => { saveConsent('declined'); };
+    document.addEventListener('DOMContentLoaded', () => {
+      let consent;
+      try { consent = localStorage.getItem(COOKIE_CONSENT_KEY); } catch { /* Storage may be disabled. */ }
+      showCookieConsentUi(!['accepted', 'declined'].includes(consent)); renderTokenList();
+    });
     generateBtn.addEventListener('click', generateToken);
     getCharBtn.addEventListener('click', getCharacter);
     copyBtn.addEventListener('click', copyTokenToClipboard);
