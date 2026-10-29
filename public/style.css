@@ -9,6 +9,10 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+* { box-sizing: border-box; }
+
+.character-meta, .ability > div { min-width: 0; overflow-wrap: anywhere; }
+
 h1 {
   font-size: 2.8rem;
   text-align: center;
@@ -118,4 +122,11 @@ code {
   font-weight: 700;
   color: #d63232;
   font-family: 'Courier New', Courier, monospace;
+}
+
+@media (max-width: 560px) {
+  body { margin: 1em auto; padding: 1em; }
+  h1 { font-size: 2rem; }
+  .character-card .ability-grid { grid-template-columns: minmax(0, 1fr); }
+  body #tokenList code { max-width: 45vw; }
 }
